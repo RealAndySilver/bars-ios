@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B4D33DC1A1FA9B0002924E4 /* fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B4D33DB1A1FA9B0002924E4 /* fire.png */; };
+		8B4D33E01A1FAD13002924E4 /* ParticlesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B4D33DF1A1FAD13002924E4 /* ParticlesView.m */; };
+		8B4D33E21A1FADAD002924E4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4D33E11A1FADAD002924E4 /* QuartzCore.framework */; };
 		8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9189E11A1CDB78003173C9 /* BarsViewController.swift */; };
 		8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB19671A1B87AE00138C2F /* AppDelegate.swift */; };
 		8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB19691A1B87AE00138C2F /* ViewController.swift */; };
@@ -27,6 +30,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B4D33DB1A1FA9B0002924E4 /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
+		8B4D33DD1A1FAD13002924E4 /* BarProto2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BarProto2-Bridging-Header.h"; sourceTree = "<group>"; };
+		8B4D33DE1A1FAD13002924E4 /* ParticlesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlesView.h; sourceTree = "<group>"; };
+		8B4D33DF1A1FAD13002924E4 /* ParticlesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticlesView.m; sourceTree = "<group>"; };
+		8B4D33E11A1FADAD002924E4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8B9189E11A1CDB78003173C9 /* BarsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarsViewController.swift; sourceTree = "<group>"; };
 		8BAB19621A1B87AE00138C2F /* BarProto2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarProto2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BAB19661A1B87AE00138C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4D33E21A1FADAD002924E4 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,9 +67,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B4D33DA1A1FA9B0002924E4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8B4D33DB1A1FA9B0002924E4 /* fire.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		8BAB19591A1B87AE00138C2F = {
 			isa = PBXGroup;
 			children = (
+				8B4D33E11A1FADAD002924E4 /* QuartzCore.framework */,
 				8BAB19641A1B87AE00138C2F /* BarProto2 */,
 				8BAB197A1A1B87AE00138C2F /* BarProto2Tests */,
 				8BAB19631A1B87AE00138C2F /* Products */,
@@ -82,10 +100,13 @@
 				8BAB19671A1B87AE00138C2F /* AppDelegate.swift */,
 				8BAB19691A1B87AE00138C2F /* ViewController.swift */,
 				8B9189E11A1CDB78003173C9 /* BarsViewController.swift */,
+				8B4D33DE1A1FAD13002924E4 /* ParticlesView.h */,
+				8B4D33DF1A1FAD13002924E4 /* ParticlesView.m */,
 				8BAB196B1A1B87AE00138C2F /* Main.storyboard */,
 				8BAB196E1A1B87AE00138C2F /* Images.xcassets */,
 				8BAB19701A1B87AE00138C2F /* LaunchScreen.xib */,
 				8BAB19651A1B87AE00138C2F /* Supporting Files */,
+				8B4D33DD1A1FAD13002924E4 /* BarProto2-Bridging-Header.h */,
 			);
 			path = BarProto2;
 			sourceTree = "<group>";
@@ -93,6 +114,7 @@
 		8BAB19651A1B87AE00138C2F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8B4D33DA1A1FA9B0002924E4 /* Resources */,
 				8BAB19661A1B87AE00138C2F /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -164,6 +186,7 @@
 				TargetAttributes = {
 					8BAB19611A1B87AE00138C2F = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 4U39LJL48R;
 					};
 					8BAB19761A1B87AE00138C2F = {
 						CreatedOnToolsVersion = 6.1;
@@ -196,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BAB196D1A1B87AE00138C2F /* Main.storyboard in Resources */,
+				8B4D33DC1A1FA9B0002924E4 /* fire.png in Resources */,
 				8BAB19721A1B87AE00138C2F /* LaunchScreen.xib in Resources */,
 				8BAB196F1A1B87AE00138C2F /* Images.xcassets in Resources */,
 			);
@@ -215,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4D33E01A1FAD13002924E4 /* ParticlesView.m in Sources */,
 				8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */,
 				8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */,
 				8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */,
@@ -342,10 +367,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
 				INFOPLIST_FILE = BarProto2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9e15a685-a097-4c69-b20d-bf75d31c9a9b";
+				SWIFT_OBJC_BRIDGING_HEADER = "BarProto2/BarProto2-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -353,10 +382,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
 				INFOPLIST_FILE = BarProto2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9e15a685-a097-4c69-b20d-bf75d31c9a9b";
+				SWIFT_OBJC_BRIDGING_HEADER = "BarProto2/BarProto2-Bridging-Header.h";
 			};
 			name = Release;
 		};

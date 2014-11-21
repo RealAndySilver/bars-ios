@@ -10,12 +10,12 @@ import UIKit
 
 class BarsViewController: UIViewController, UIAlertViewDelegate {
 
+    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var containerUI: UIView!
+    var score: Int = 0
     var barsContainer1: UIView!
     var barsContainer2: UIView!
-    var perfectLabel: UILabel!
-    var perfectLabel2: UILabel!
     var container1IsLeft = true
     var activeBarIndex: Int = 0;
     var barsTimer: NSTimer!
@@ -61,6 +61,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     var colorPalettesArray = []
     var viewIsZoomed = false
     var pixelLabel: UILabel!
+    //var particlesView: ParticlesView!
     
     
     //MARK: View Lifecycle
@@ -95,19 +96,9 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
         setupContainer(barsContainer1, asInitialContainer: true)
         setupContainer(barsContainer2, asInitialContainer: false)
         
-        perfectLabel = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: view.bounds.size.width/5.0, height: 20.0))
-        perfectLabel.textColor = blueColorsArray[9]
-        perfectLabel.font = UIFont.boldSystemFontOfSize(12.0)
-        perfectLabel.text = ""
-        perfectLabel.textAlignment = NSTextAlignment.Center
-        barsContainer1.addSubview(perfectLabel)
-        
-        perfectLabel2 = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: view.bounds.size.width/5.0, height: 20.0))
-        perfectLabel2.textColor = blueColorsArray[9]
-        perfectLabel2.font = UIFont.boldSystemFontOfSize(12.0)
-        perfectLabel2.text = ""
-        perfectLabel2.textAlignment = NSTextAlignment.Center
-        barsContainer2.addSubview(perfectLabel2)
+        /*particlesView = ParticlesView(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 200.0))
+        particlesView.backgroundColor = UIColor.blackColor()
+        view.addSubview(particlesView)*/
     }
     
     func setupContainer(barContainer: UIView, asInitialContainer: Bool) {
@@ -170,7 +161,6 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     //MARK: Animation Stuff
     
     func animateContainerHorizontally() {
-        setPerfectLabelText("")
         
         var container1Frame = self.barsContainer1.frame;
         container1Frame.origin.x = container1Frame.origin.x - view.bounds.size.width
@@ -221,6 +211,35 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
         barSpeed += increaseSpeedFactor
     }
     
+    func createWinLabelWithText(text: String, inBarsContainer: UIView) {
+        //Create a label above the objective rect
+        let winLabel = UILabel(frame: CGRect(x: activeObjectiveRect.frame.origin.x, y: activeObjectiveRect.frame.origin.y - 22.0, width: activeObjectiveRect.frame.size.width, height: 20.0))
+        winLabel.text = text
+        winLabel.textColor = blueColorsArray[9]
+        winLabel.font = UIFont.boldSystemFontOfSize(13.0)
+        winLabel.textAlignment = .Center
+        winLabel.alpha = 0.0
+        inBarsContainer.addSubview(winLabel)
+        UIView.animateWithDuration(0.2,
+            delay: 0.0,
+            options: UIViewAnimationOptions.AllowUserInteraction,
+            animations: { () -> Void in
+                winLabel.alpha = 1.0
+            }) { (success) -> Void in
+                
+                //Second animation 
+                UIView.animateWithDuration(0.5,
+                    delay: 0.0,
+                    options: UIViewAnimationOptions.AllowUserInteraction,
+                    animations: { () -> Void in
+                        winLabel.transform = CGAffineTransformConcat(CGAffineTransformMakeTranslation(0.0, -20.0), CGAffineTransformMakeScale(1.5, 1.5))
+                        winLabel.alpha = 0.0
+                }, completion: { (success) -> Void in
+                    winLabel.removeFromSuperview()
+                })
+        }
+    }
+    
     //MARK: Touches Handling
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -257,50 +276,62 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     //MARK: Winning & Lossing
     
     func checkIfUserWon() {
-        setupPerfectLabelPosition()
         
         if activeObjectiveRect.frame.contains(activeBar.frame.origin) || activeObjectiveRect.frame.origin.y == activeBar.frame.origin.y || (activeObjectiveRect.frame.origin.y + activeObjectiveRect.frame.size.height == activeBar.frame.origin.y){
             //User Won
+            //Get the current active bars container
+            var barsContainer: UIView!
+            
+            if container1IsLeft {
+                barsContainer = barsContainer1
+            } else {
+                barsContainer = barsContainer2
+            }
             
             //Check if user put the bar on the bottom edge of the objective rect
             if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y + activeObjectiveRect.frame.size.height {
                 //"Good"
-                setPerfectLabelText("GOOD!")
+                createWinLabelWithText("GOOD", inBarsContainer: barsContainer)
+                setScoreWithBonus(1)
                 
             } else if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y + activeObjectiveRect.frame.size.height/2.0 {
                 //The user put the bar on the middle of the objective rect 
-                setPerfectLabelText("GREAT!")
+                createWinLabelWithText("GREAT!", inBarsContainer: barsContainer)
+                setScoreWithBonus(2)
             
             } else if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y {
                 //The user put the bar on the top of the objective rect 
-                setPerfectLabelText("PERFECT!")
+                createWinLabelWithText("PERFECT", inBarsContainer: barsContainer)
+                setScoreWithBonus(3)
                 
             } else {
                 let num = arc4random()%2
                 if (num == 0) {
-                    setPerfectLabelText("OK")
+                    createWinLabelWithText("OK!", inBarsContainer: barsContainer)
                 } else {
-                    setPerfectLabelText("NOT BAD")
+                    createWinLabelWithText("NOT BAD", inBarsContainer: barsContainer)
                 }
+                setScoreWithBonus(0)
             }
-            //hiddePerfectLabelAfterDelay()
             
             prepareNextBar()
-            correctBars++
-            updateLabel()
         } else {
             userLost()
         }
     }
     
+    func setScoreWithBonus(bonus: Int) {
+        correctBars++
+        score++;
+        score+=bonus
+        updateLabel()
+    }
+    
     func userLost() {
         //User Lost
-        perfectLabel.text = ""
-        perfectLabel2.text = ""
-        
+      
         stopTimer()
         var pixelDifference: CGFloat
-        
         
         //Calculamos la diferencia en pixeles entre el limite del objectiveRect y la barra 
         //Detectamos si el usuario perdió porque se pasó o porque oprimió antes de llegar
@@ -371,7 +402,8 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     }
     
     func updateLabel() {
-        timeLabel.text = "\(correctBars)"
+        timeLabel.text = "BARS : \(correctBars)"
+        scoreLabel.text = "\(score) : SCORE"
     }
     
     //MARK: Resetting bar positions
@@ -418,33 +450,6 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     //MARK: Custom Methods
     
-    func hiddePerfectLabelAfterDelay() {
-        /*let delay = 1.0 * Double(NSEC_PER_SEC)
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-        dispatch_after(time, dispatch_get_main_queue()) { () -> Void in
-            self.perfectLabel.text = ""
-        }*/
-    }
-    
-    func setPerfectLabelText(text: String) {
-        if container1IsLeft {
-            perfectLabel.text = text
-        } else {
-            perfectLabel2.text = text
-        }
-    }
-    
-    func setupPerfectLabelPosition() {
-        var newFrame = activeObjectiveRect.frame
-        newFrame.origin.y = newFrame.origin.y - 22.0
-        
-        if container1IsLeft {
-            perfectLabel.frame = newFrame
-        } else {
-            perfectLabel2.frame = newFrame
-        }
-    }
-    
     func randomizeSpeedsBetweenLowIndex(lowIndex: Int, maxIndex: Int) {
         for index in lowIndex...maxIndex {
             var randomSpeed = Int(arc4random()%10 + 1)
@@ -470,6 +475,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     func resetGame() {
         correctBars = 0
+        score = 0
         updateLabel()
         
         if self.container1IsLeft {
