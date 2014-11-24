@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BarsViewController: UIViewController, UIAlertViewDelegate {
+class BarsViewController: UIViewController, GameOverAlertDelegate {
 
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var containerUI: UIView!
@@ -27,51 +27,22 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     var activeObjectiveRect: UIView!
     var correctBars = 0
     var speedsArray: Array<Int> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    var blueColorsArray: Array<UIColor> = [UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.8, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.7, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.6, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.5, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.4, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.3, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.2, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.1, green: 0.9, blue: 0.9, alpha: 1.0),
-                                        UIColor(red: 0.0, green: 0.9, blue: 0.9, alpha: 1.0)]
-    
-    var colorsArray2: Array<UIColor> = [UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.8, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.7, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.6, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.5, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.4, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.3, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.2, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.1, blue: 0.9, alpha: 1.0)]
-    
-    var colorsArray3: Array<UIColor> = [UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.8, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.7, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.6, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.5, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.4, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.3, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.2, alpha: 1.0),
-        UIColor(red: 0.9, green: 0.9, blue: 0.1, alpha: 1.0)]
-    
-    var colorPalettesArray = []
     var viewIsZoomed = false
     var pixelLabel: UILabel!
-    //var particlesView: ParticlesView!
+    var gameActivated = true
     
+    //Get a random color for the objective bar
+    let palettesArray = AppColors.sharedInstance().getPatternColors()
+    let objBarColors = AppColors.sharedInstance().getObjBarColors()
+    var selectedPalette: Int!
     
     //MARK: View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.whiteColor()
-        colorPalettesArray = [blueColorsArray, colorsArray2, colorsArray3]
+        selectedPalette = Int(arc4random()%UInt32(palettesArray.count))
+        //colorPalettesArray = [blueColorsArray, colorsArray2, colorsArray3]
         setupSpeeds()
         setupUI()
     }
@@ -87,7 +58,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     func setupSpeeds() {
         //Randomize all the speeds
         for index in 0...9 {
-            var randomSpeed = Int(arc4random()%10 + 1)
+            var randomSpeed = Int(arc4random()%5 + 3)
             speedsArray[index] = randomSpeed
         }
     }
@@ -101,7 +72,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
         //Setup the counting label
         countingLabel = UICountingLabel(frame: CGRect(x: view.bounds.size.width/2.0 - 120.0, y: 0.0, width: 240.0, height: 67.0))
         countingLabel.font = UIFont.boldSystemFontOfSize(40.0)
-        countingLabel.textColor = blueColorsArray[9]
+        countingLabel.textColor = palettesArray.first?.last
         countingLabel.textAlignment = .Center
         countingLabel.format = "%d"
         countingLabel.text = "0"
@@ -128,12 +99,13 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
             randomHeight += 67
             
             let barView = UIView(frame: CGRect(x:2*CGFloat(index + 1) + CGFloat(index) * barWidth, y: view.bounds.size.height - 180.0, width: barWidth, height: view.bounds.size.height + 10.0))
-            barView.backgroundColor = colorPalettesArray[randomPalette][speedsArray[index + initialIndex] - 1] as UIColor
+            //barView.backgroundColor = colorPalettesArray[randomPalette][speedsArray[index + initialIndex] - 3] as UIColor
+            barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index + initialIndex] - 3]
             barView.tag = index + initialIndex + 1
             barContainer.addSubview(barView)
             
             let objectiveRect = UIView(frame: CGRect(x: barView.frame.origin.x, y: CGFloat(randomHeight), width: barWidth, height: 30.0))
-            objectiveRect.backgroundColor = UIColor(red: 0.902, green: 0.640, blue: 1.000, alpha: 0.7)
+            objectiveRect.backgroundColor = objBarColors[selectedPalette].colorWithAlphaComponent(0.7)
             objectiveRect.tag = 1001 + index + initialIndex
             barContainer.addSubview(objectiveRect)
         }
@@ -147,12 +119,6 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     func startTimer() {
         barSpeed = CGFloat(speedsArray[activeBarIndex - 1])
-        if barSpeed > 7 {
-            barSpeed = 7
-        } else if barSpeed < 3 {
-            barSpeed = 3
-        }
-       
         increaseSpeedFactor = barSpeed
 
         if (container1IsLeft) {
@@ -223,7 +189,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
         //Create a label above the objective rect
         let winLabel = UILabel(frame: CGRect(x: activeObjectiveRect.frame.origin.x, y: activeObjectiveRect.frame.origin.y - 22.0, width: activeObjectiveRect.frame.size.width, height: 20.0))
         winLabel.text = text
-        winLabel.textColor = blueColorsArray[9]
+        winLabel.textColor = palettesArray.first?.last
         winLabel.font = UIFont.boldSystemFontOfSize(13.0)
         winLabel.textAlignment = .Center
         winLabel.alpha = 0.0
@@ -251,7 +217,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     //MARK: Touches Handling
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        if touches.count == 1 {
+        if touches.count == 1 && gameActivated{
             if viewIsZoomed {
                 //Zooom out
                 var barsContainer: UIView!
@@ -302,10 +268,16 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
                 createWinLabelWithText("GOOD", inBarsContainer: barsContainer)
                 setScoreWithBonus(kScoreIncreaseFactor)
                 
+                //Create the particles because the user did a perfect bar score
+                createParticlesAtPosition(activeObjectiveRect.center, inBarsContainer: barsContainer)
+                
             } else if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y + activeObjectiveRect.frame.size.height/2.0 {
                 //The user put the bar on the middle of the objective rect 
                 createWinLabelWithText("GREAT!", inBarsContainer: barsContainer)
                 setScoreWithBonus(kScoreIncreaseFactor * 2)
+                
+                //Create the particles because the user did a perfect bar score
+                createParticlesAtPosition(activeObjectiveRect.center, inBarsContainer: barsContainer)
             
             } else if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y {
                 //The user put the bar on the top of the objective rect 
@@ -433,57 +405,47 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     }
     
     func updateLabel() {
-        timeLabel.text = "BARS : \(correctBars)"
+        timeLabel.text = "\(correctBars)"
         countingLabel.countFromCurrentValueTo(Float(score), withDuration: 0.4)
     }
     
     //MARK: Resetting bar positions
     
-    func setContainer1BarsToOrigin() {
-        randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
-        let randomPalette = Int(arc4random()%3)
-        for index in 1...5 {
-            if let barView = barsContainer1.viewWithTag(index) {
+    func setBarsToOriginInContainer(barsContainer: UIView, initialIndex: Int, finalIndex: Int) {
+        let randomPalette = Int(arc4random()%UInt32(palettesArray.count))
+        for index in initialIndex...finalIndex {
+            if let barView = barsContainer.viewWithTag(index) {
                 barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
-                barView.backgroundColor = colorPalettesArray[randomPalette][speedsArray[index - 1] - 1] as UIColor
+                barView.backgroundColor = palettesArray[randomPalette][speedsArray[index - 1] - 3] as UIColor
             }
             
-            if let objectiveBar = barsContainer1.viewWithTag(index + 1000) {
+            if let objectiveBar = barsContainer.viewWithTag(index + 1000) {
                 var newFrame = objectiveBar.frame
                 
                 var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
                 randomHeight += 67
                 newFrame.origin.y = CGFloat(randomHeight)
                 objectiveBar.frame = newFrame
+                objectiveBar.backgroundColor = objBarColors[randomPalette].colorWithAlphaComponent(0.7)
             }
         }
     }
     
+    func setContainer1BarsToOrigin() {
+        randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
+        setBarsToOriginInContainer(barsContainer1, initialIndex: 1, finalIndex: 5)
+    }
+    
     func setContainer2BarsToOrigin() {
         randomizeSpeedsBetweenLowIndex(5, maxIndex: 9)
-        let randomPalette = Int(arc4random()%3)
-        for index in 6...10 {
-            if let barView = barsContainer2.viewWithTag(index) {
-                barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
-                barView.backgroundColor = colorPalettesArray[randomPalette][speedsArray[index - 1] - 1] as UIColor
-            }
-            
-            if let objectiveBar = barsContainer2.viewWithTag(index + 1000) {
-                var newFrame = objectiveBar.frame
-                
-                var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
-                randomHeight += 67
-                newFrame.origin.y = CGFloat(randomHeight)
-                objectiveBar.frame = newFrame
-            }
-        }
+        setBarsToOriginInContainer(barsContainer2, initialIndex: 6, finalIndex: 10)
     }
     
     //MARK: Custom Methods
     
     func randomizeSpeedsBetweenLowIndex(lowIndex: Int, maxIndex: Int) {
         for index in lowIndex...maxIndex {
-            var randomSpeed = Int(arc4random()%10 + 1)
+            var randomSpeed = Int(arc4random()%5 + 3)
             speedsArray[index] = randomSpeed
         }
     }
@@ -504,7 +466,29 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     //MARK: Game Resetting 
     
+    func resetBarsContainer(barsContainer: UIView, initIndex: Int, finalIndex: Int) {
+        let randomPalette = Int(arc4random()%UInt32(palettesArray.count))
+        for index in initIndex...finalIndex {
+            if let barView = barsContainer.viewWithTag(index) {
+                barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
+                barView.backgroundColor = palettesArray[randomPalette][speedsArray[index - 1] - 3] as UIColor
+            }
+            
+            if let objectiveBar = barsContainer.viewWithTag(index + 1000) {
+                var newFrame = objectiveBar.frame
+                
+                var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
+                randomHeight += 67
+                newFrame.origin.y = CGFloat(randomHeight)
+                objectiveBar.frame = newFrame
+                objectiveBar.backgroundColor = objBarColors[randomPalette].colorWithAlphaComponent(0.7)
+            }
+        }
+        startTimer()
+    }
+    
     func resetGame() {
+        gameActivated = true
         correctBars = 0
         score = 0
         updateLabel()
@@ -512,60 +496,31 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
         if self.container1IsLeft {
             //Perdiste estando en el container 1
             activeBarIndex = 1
-            //randomizeContainer1Speeds()
             randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
-            let randomPalette = Int(arc4random()%3)
-            for index in 1...5 {
-                if let barView = barsContainer1.viewWithTag(index) {
-                    barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
-                    barView.backgroundColor = colorPalettesArray[randomPalette][speedsArray[index - 1] - 1] as UIColor
-                }
-                
-                if let objectiveBar = barsContainer1.viewWithTag(index + 1000) {
-                    var newFrame = objectiveBar.frame
-                    
-                    var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
-                    randomHeight += 67
-                    newFrame.origin.y = CGFloat(randomHeight)
-                    objectiveBar.frame = newFrame
-                }
-            }
-            startTimer()
+            resetBarsContainer(barsContainer1, initIndex: 1, finalIndex: 5)
             
         } else {
             //Perdiste estando en el container 2
             activeBarIndex = 6
-            //randomizeContainer2Speeds()
             randomizeSpeedsBetweenLowIndex(5, maxIndex: 9)
-            let randomPalette = Int(arc4random()%3)
-            for index in 6...10 {
-                if let barView = barsContainer2.viewWithTag(index) {
-                    barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
-                    barView.backgroundColor = colorPalettesArray[randomPalette][speedsArray[index - 1] - 1] as UIColor
-                }
-                
-                if let objectiveBar = barsContainer2.viewWithTag(index + 1000) {
-                    var newFrame = objectiveBar.frame
-                    
-                    var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
-                    randomHeight += 67
-                    newFrame.origin.y = CGFloat(randomHeight)
-                    objectiveBar.frame = newFrame
-                }
-            }
-            startTimer()
+            resetBarsContainer(barsContainer2, initIndex: 6, finalIndex: 10)
         }
     }
     
     //MARK: Alerts
     
     func showLostAlert() {
-        UIAlertView(title: "Juego Terminado", message: "Has completado \(correctBars) barras!", delegate: self, cancelButtonTitle: "Reintentar").show()
+        gameActivated = false
+        
+        let gameOverAlert = GameOverAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 100.0, width: 250.0, height: 200.0))
+        gameOverAlert.score = score
+        gameOverAlert.delegate = self
+        gameOverAlert.showInView(view)
     }
     
-    //MARK: UIAlertViewDelegate
+    //MARK: GameOVerAlertDelegate
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+    func restartButtonPressedInGameOverAlert() {
         resetGame()
     }
 }

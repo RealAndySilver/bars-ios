@@ -18,8 +18,10 @@
 		8BAB197E1A1B87AE00138C2F /* BarProto2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB197D1A1B87AE00138C2F /* BarProto2Tests.swift */; };
 		A05128D81A23824F00892993 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A05128D71A23824F00892993 /* UICountingLabel.m */; };
 		A05128DF1A2390A500892993 /* DWFParticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A05128DE1A2390A500892993 /* DWFParticleView.m */; };
-		A05128E11A23911000892993 /* Particles_fire.png in Resources */ = {isa = PBXBuildFile; fileRef = A05128E01A23911000892993 /* Particles_fire.png */; };
 		A05128E31A239BC500892993 /* SquareParticle.png in Resources */ = {isa = PBXBuildFile; fileRef = A05128E21A239BC500892993 /* SquareParticle.png */; };
+		A05128E71A23AA8B00892993 /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = A05128E61A23AA8B00892993 /* Colors.plist */; };
+		A05128EA1A23B16200892993 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05128E91A23B16200892993 /* AppColors.swift */; };
+		A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05128EB1A23DC9B00892993 /* GameOverAlert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,8 +53,10 @@
 		A05128D71A23824F00892993 /* UICountingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICountingLabel.m; sourceTree = "<group>"; };
 		A05128DD1A2390A500892993 /* DWFParticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWFParticleView.h; path = "Custom Views/DWFParticleView.h"; sourceTree = "<group>"; };
 		A05128DE1A2390A500892993 /* DWFParticleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DWFParticleView.m; path = "Custom Views/DWFParticleView.m"; sourceTree = "<group>"; };
-		A05128E01A23911000892993 /* Particles_fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Particles_fire.png; path = BarProto2/Resources/Particles_fire.png; sourceTree = "<group>"; };
 		A05128E21A239BC500892993 /* SquareParticle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SquareParticle.png; sourceTree = "<group>"; };
+		A05128E61A23AA8B00892993 /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
+		A05128E91A23B16200892993 /* AppColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppColors.swift; path = Utilities/AppColors.swift; sourceTree = "<group>"; };
+		A05128EB1A23DC9B00892993 /* GameOverAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameOverAlert.swift; path = "Custom Views/GameOverAlert.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +90,6 @@
 		8BAB19591A1B87AE00138C2F = {
 			isa = PBXGroup;
 			children = (
-				A05128E01A23911000892993 /* Particles_fire.png */,
 				8B4D33E11A1FADAD002924E4 /* QuartzCore.framework */,
 				8BAB19641A1B87AE00138C2F /* BarProto2 */,
 				8BAB197A1A1B87AE00138C2F /* BarProto2Tests */,
@@ -107,11 +110,12 @@
 			isa = PBXGroup;
 			children = (
 				A05128D41A23824200892993 /* Libraries */,
+				A05128E81A23B12800892993 /* ObjC Classes */,
 				8BAB19671A1B87AE00138C2F /* AppDelegate.swift */,
 				8BAB19691A1B87AE00138C2F /* ViewController.swift */,
 				8B9189E11A1CDB78003173C9 /* BarsViewController.swift */,
-				A05128DD1A2390A500892993 /* DWFParticleView.h */,
-				A05128DE1A2390A500892993 /* DWFParticleView.m */,
+				A05128E91A23B16200892993 /* AppColors.swift */,
+				A05128EB1A23DC9B00892993 /* GameOverAlert.swift */,
 				8BAB196B1A1B87AE00138C2F /* Main.storyboard */,
 				8BAB196E1A1B87AE00138C2F /* Images.xcassets */,
 				8BAB19701A1B87AE00138C2F /* LaunchScreen.xib */,
@@ -126,6 +130,7 @@
 			children = (
 				8B4D33DA1A1FA9B0002924E4 /* Resources */,
 				8BAB19661A1B87AE00138C2F /* Info.plist */,
+				A05128E61A23AA8B00892993 /* Colors.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -163,6 +168,15 @@
 			);
 			name = UICountingLabel;
 			path = Libraries/UICountingLabel;
+			sourceTree = "<group>";
+		};
+		A05128E81A23B12800892993 /* ObjC Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A05128DD1A2390A500892993 /* DWFParticleView.h */,
+				A05128DE1A2390A500892993 /* DWFParticleView.m */,
+			);
+			name = "ObjC Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,10 +260,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A05128E71A23AA8B00892993 /* Colors.plist in Resources */,
 				A05128E31A239BC500892993 /* SquareParticle.png in Resources */,
 				8BAB196D1A1B87AE00138C2F /* Main.storyboard in Resources */,
 				8B4D33DC1A1FA9B0002924E4 /* fire.png in Resources */,
-				A05128E11A23911000892993 /* Particles_fire.png in Resources */,
 				8BAB19721A1B87AE00138C2F /* LaunchScreen.xib in Resources */,
 				8BAB196F1A1B87AE00138C2F /* Images.xcassets in Resources */,
 			);
@@ -269,9 +283,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */,
 				8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */,
 				A05128DF1A2390A500892993 /* DWFParticleView.m in Sources */,
 				A05128D81A23824F00892993 /* UICountingLabel.m in Sources */,
+				A05128EA1A23B16200892993 /* AppColors.swift in Sources */,
 				8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */,
 				8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */,
 			);
