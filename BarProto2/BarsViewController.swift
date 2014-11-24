@@ -10,9 +10,11 @@ import UIKit
 
 class BarsViewController: UIViewController, UIAlertViewDelegate {
 
-    @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var containerUI: UIView!
+    
+    let kScoreIncreaseFactor = 1000;
+    var countingLabel: UICountingLabel!
     var score: Int = 0
     var barsContainer1: UIView!
     var barsContainer2: UIView!
@@ -96,9 +98,15 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
         setupContainer(barsContainer1, asInitialContainer: true)
         setupContainer(barsContainer2, asInitialContainer: false)
         
-        /*particlesView = ParticlesView(frame: CGRect(x: 0.0, y: 0.0, width: 200.0, height: 200.0))
-        particlesView.backgroundColor = UIColor.blackColor()
-        view.addSubview(particlesView)*/
+        //Setup the counting label
+        countingLabel = UICountingLabel(frame: CGRect(x: view.bounds.size.width/2.0 - 120.0, y: 0.0, width: 240.0, height: 67.0))
+        countingLabel.font = UIFont.boldSystemFontOfSize(40.0)
+        countingLabel.textColor = blueColorsArray[9]
+        countingLabel.textAlignment = .Center
+        countingLabel.format = "%d"
+        countingLabel.text = "0"
+        countingLabel.method = UILabelCountingMethodLinear
+        view.addSubview(countingLabel)
     }
     
     func setupContainer(barContainer: UIView, asInitialContainer: Bool) {
@@ -292,17 +300,20 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
             if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y + activeObjectiveRect.frame.size.height {
                 //"Good"
                 createWinLabelWithText("GOOD", inBarsContainer: barsContainer)
-                setScoreWithBonus(1)
+                setScoreWithBonus(kScoreIncreaseFactor)
                 
             } else if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y + activeObjectiveRect.frame.size.height/2.0 {
                 //The user put the bar on the middle of the objective rect 
                 createWinLabelWithText("GREAT!", inBarsContainer: barsContainer)
-                setScoreWithBonus(2)
+                setScoreWithBonus(kScoreIncreaseFactor * 2)
             
             } else if activeBar.frame.origin.y == activeObjectiveRect.frame.origin.y {
                 //The user put the bar on the top of the objective rect 
                 createWinLabelWithText("PERFECT", inBarsContainer: barsContainer)
-                setScoreWithBonus(3)
+                setScoreWithBonus(kScoreIncreaseFactor * 3)
+                
+                //Create the particles because the user did a perfect bar score
+                createParticlesAtPosition(activeObjectiveRect.center, inBarsContainer: barsContainer)
                 
             } else {
                 let num = arc4random()%2
@@ -322,8 +333,8 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     func setScoreWithBonus(bonus: Int) {
         correctBars++
-        score++;
-        score+=bonus
+        score += kScoreIncreaseFactor;
+        score += bonus
         updateLabel()
     }
     
@@ -381,6 +392,26 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     //MARK: UI Stuff
     
+    func createParticlesAtPosition(position: CGPoint, inBarsContainer: UIView) {
+        var particlesView = DWFParticleView(frame: CGRect(x: position.x, y: position.y, width: 40.0, height: 40.0))
+        particlesView.center = position
+        particlesView.backgroundColor = UIColor.clearColor()
+        inBarsContainer.addSubview(particlesView)
+        
+        let emittingDelay = 0.3 * Double(NSEC_PER_SEC)
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(emittingDelay))
+        dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+            particlesView.setIsEmitting(false)
+        })
+        
+        let removeDelay = 3.0 * Double(NSEC_PER_SEC)
+        let removeTime = dispatch_time(DISPATCH_TIME_NOW, Int64(removeDelay))
+        dispatch_after(removeTime, dispatch_get_main_queue()) { () -> Void in
+            particlesView.removeFromSuperview()
+            println("Removiendooooooooo")
+        }
+    }
+    
     func createPixelDiferenceLabel(pixelDifference: Int) {
         pixelLabel = UILabel(frame: CGRect(x: 50.0, y: 100.0, width: view.bounds.size.width - 100.0, height: 60.0))
         pixelLabel.text = "You lost by \(pixelDifference) pixels!"
@@ -403,7 +434,7 @@ class BarsViewController: UIViewController, UIAlertViewDelegate {
     
     func updateLabel() {
         timeLabel.text = "BARS : \(correctBars)"
-        scoreLabel.text = "\(score) : SCORE"
+        countingLabel.countFromCurrentValueTo(Float(score), withDuration: 0.4)
     }
     
     //MARK: Resetting bar positions

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="fRF-n7-QQ4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="fRF-n7-QQ4">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
@@ -42,28 +42,28 @@
                                             <constraint firstAttribute="width" constant="125" id="1Sy-an-A8S"/>
                                             <constraint firstAttribute="height" constant="34" id="x5T-Zg-2zg"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <color key="textColor" red="0.23123435300564577" green="0.89502766029787106" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 : SCORE" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f9f-Dt-bta">
-                                        <rect key="frame" x="467" y="17" width="125" height="34"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kq2-d3-CTz">
+                                        <rect key="frame" x="278" y="0.0" width="45" height="21"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="34" id="8Qs-Nl-x11"/>
-                                            <constraint firstAttribute="width" constant="125" id="FH1-36-W4I"/>
+                                            <constraint firstAttribute="width" constant="45" id="NI3-3v-Vnj"/>
+                                            <constraint firstAttribute="height" constant="21" id="g2G-Yg-1aC"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <color key="textColor" red="0.231234353" green="0.89502766030000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" red="0.64705884456634521" green="0.89803922176361084" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.24858535369429582" green="0.29047670711348428" blue="0.3274345012626263" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="67" id="7N7-FK-eG5"/>
-                                    <constraint firstItem="f9f-Dt-bta" firstAttribute="top" secondItem="SMs-RL-fcJ" secondAttribute="top" constant="17" id="7gW-zX-GBl"/>
                                     <constraint firstItem="XCn-bf-kBA" firstAttribute="leading" secondItem="SMs-RL-fcJ" secondAttribute="leading" constant="8" id="CKv-CA-Uq1"/>
+                                    <constraint firstAttribute="centerX" secondItem="kq2-d3-CTz" secondAttribute="centerX" id="dih-Eb-d9V"/>
+                                    <constraint firstItem="kq2-d3-CTz" firstAttribute="top" secondItem="SMs-RL-fcJ" secondAttribute="top" id="fye-JQ-bPs"/>
                                     <constraint firstItem="XCn-bf-kBA" firstAttribute="top" secondItem="SMs-RL-fcJ" secondAttribute="top" constant="17" id="orc-pj-XNJ"/>
-                                    <constraint firstAttribute="trailing" secondItem="f9f-Dt-bta" secondAttribute="trailing" constant="8" id="u0I-64-Ifq"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -76,13 +76,12 @@
                     </view>
                     <connections>
                         <outlet property="containerUI" destination="SMs-RL-fcJ" id="9s4-kA-Az5"/>
-                        <outlet property="scoreLabel" destination="f9f-Dt-bta" id="gXY-RU-Muw"/>
                         <outlet property="timeLabel" destination="XCn-bf-kBA" id="yiN-21-T96"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1IC-Gp-8Bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1194" y="261"/>
+            <point key="canvasLocation" x="1191" y="283"/>
         </scene>
     </scenes>
 </document>
