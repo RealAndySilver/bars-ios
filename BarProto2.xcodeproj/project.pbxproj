@@ -16,12 +16,16 @@
 		8BAB196F1A1B87AE00138C2F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BAB196E1A1B87AE00138C2F /* Images.xcassets */; };
 		8BAB19721A1B87AE00138C2F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAB19701A1B87AE00138C2F /* LaunchScreen.xib */; };
 		8BAB197E1A1B87AE00138C2F /* BarProto2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB197D1A1B87AE00138C2F /* BarProto2Tests.swift */; };
+		A0063C981A24E1B5002B73F0 /* TwoButtonsAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0063C971A24E1B5002B73F0 /* TwoButtonsAlert.swift */; };
+		A0063C9A1A24EFEE002B73F0 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0063C991A24EFEE002B73F0 /* UserData.swift */; };
+		A0063C9C1A2513D7002B73F0 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0063C9B1A2513D7002B73F0 /* StatisticsViewController.swift */; };
 		A05128D81A23824F00892993 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A05128D71A23824F00892993 /* UICountingLabel.m */; };
 		A05128DF1A2390A500892993 /* DWFParticleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A05128DE1A2390A500892993 /* DWFParticleView.m */; };
 		A05128E31A239BC500892993 /* SquareParticle.png in Resources */ = {isa = PBXBuildFile; fileRef = A05128E21A239BC500892993 /* SquareParticle.png */; };
 		A05128E71A23AA8B00892993 /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = A05128E61A23AA8B00892993 /* Colors.plist */; };
 		A05128EA1A23B16200892993 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05128E91A23B16200892993 /* AppColors.swift */; };
 		A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05128EB1A23DC9B00892993 /* GameOverAlert.swift */; };
+		A08FAEEA1A24CCB20085603F /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08FAEE91A24CCB20085603F /* MainMenuViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +53,9 @@
 		8BAB19771A1B87AE00138C2F /* BarProto2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarProto2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BAB197C1A1B87AE00138C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8BAB197D1A1B87AE00138C2F /* BarProto2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarProto2Tests.swift; sourceTree = "<group>"; };
+		A0063C971A24E1B5002B73F0 /* TwoButtonsAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TwoButtonsAlert.swift; path = "Custom Views/TwoButtonsAlert.swift"; sourceTree = "<group>"; };
+		A0063C991A24EFEE002B73F0 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserData.swift; path = Utilities/UserData.swift; sourceTree = "<group>"; };
+		A0063C9B1A2513D7002B73F0 /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		A05128D61A23824F00892993 /* UICountingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICountingLabel.h; sourceTree = "<group>"; };
 		A05128D71A23824F00892993 /* UICountingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICountingLabel.m; sourceTree = "<group>"; };
 		A05128DD1A2390A500892993 /* DWFParticleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DWFParticleView.h; path = "Custom Views/DWFParticleView.h"; sourceTree = "<group>"; };
@@ -57,6 +64,7 @@
 		A05128E61A23AA8B00892993 /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
 		A05128E91A23B16200892993 /* AppColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppColors.swift; path = Utilities/AppColors.swift; sourceTree = "<group>"; };
 		A05128EB1A23DC9B00892993 /* GameOverAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameOverAlert.swift; path = "Custom Views/GameOverAlert.swift"; sourceTree = "<group>"; };
+		A08FAEE91A24CCB20085603F /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,11 +119,14 @@
 			children = (
 				A05128D41A23824200892993 /* Libraries */,
 				A05128E81A23B12800892993 /* ObjC Classes */,
+				A0063C961A24E188002B73F0 /* Custom Views */,
 				8BAB19671A1B87AE00138C2F /* AppDelegate.swift */,
 				8BAB19691A1B87AE00138C2F /* ViewController.swift */,
 				8B9189E11A1CDB78003173C9 /* BarsViewController.swift */,
+				A08FAEE91A24CCB20085603F /* MainMenuViewController.swift */,
+				A0063C9B1A2513D7002B73F0 /* StatisticsViewController.swift */,
 				A05128E91A23B16200892993 /* AppColors.swift */,
-				A05128EB1A23DC9B00892993 /* GameOverAlert.swift */,
+				A0063C991A24EFEE002B73F0 /* UserData.swift */,
 				8BAB196B1A1B87AE00138C2F /* Main.storyboard */,
 				8BAB196E1A1B87AE00138C2F /* Images.xcassets */,
 				8BAB19701A1B87AE00138C2F /* LaunchScreen.xib */,
@@ -150,6 +161,15 @@
 				8BAB197C1A1B87AE00138C2F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A0063C961A24E188002B73F0 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				A05128EB1A23DC9B00892993 /* GameOverAlert.swift */,
+				A0063C971A24E1B5002B73F0 /* TwoButtonsAlert.swift */,
+			);
+			name = "Custom Views";
 			sourceTree = "<group>";
 		};
 		A05128D41A23824200892993 /* Libraries */ = {
@@ -283,12 +303,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A08FAEEA1A24CCB20085603F /* MainMenuViewController.swift in Sources */,
 				A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */,
 				8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */,
 				A05128DF1A2390A500892993 /* DWFParticleView.m in Sources */,
 				A05128D81A23824F00892993 /* UICountingLabel.m in Sources */,
+				A0063C9C1A2513D7002B73F0 /* StatisticsViewController.swift in Sources */,
+				A0063C981A24E1B5002B73F0 /* TwoButtonsAlert.swift in Sources */,
 				A05128EA1A23B16200892993 /* AppColors.swift in Sources */,
 				8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */,
+				A0063C9A1A24EFEE002B73F0 /* UserData.swift in Sources */,
 				8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
