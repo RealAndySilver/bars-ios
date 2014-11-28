@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StatisticsViewController: UIViewController {
+class StatisticsViewController: UIViewController, GKGameCenterControllerDelegate {
 
     @IBOutlet weak var arcadeScoreLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
@@ -53,6 +53,15 @@ class StatisticsViewController: UIViewController {
     }
     
     @IBAction func rankingsButtonPressed(sender: AnyObject) {
+        let gameCenterVC = GKGameCenterViewController()
+        gameCenterVC.viewState = GKGameCenterViewControllerState.Leaderboards
+        gameCenterVC.gameCenterDelegate = self
+        presentViewController(gameCenterVC, animated: true, completion: nil)
+    }
     
+    //MARK: GameCenterDelegate
+    
+    func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController!) {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }

@@ -8,8 +8,8 @@
 
 import UIKit
 
-class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate {
-
+class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate, VungleSDKDelegate, OneButtonAlertDelegate {
+    
     @IBOutlet weak var littleScoreLabel: UILabel!
     @IBOutlet weak var littleMaxScoreLabel: UILabel!
     @IBOutlet weak var littleBarsLabel: UILabel!
@@ -42,6 +42,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var expertModeActivated: Bool!
     var trainingModeActivated: Bool!
     var gamePaused = false
+    var firstTimeViewAppears = true
+    var userViewedVideo = false
     
     //Training mode UI
     var slider: UISlider!
@@ -64,8 +66,11 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        activeBarIndex++;
-        showInitialAlert()
+        if firstTimeViewAppears {
+            activeBarIndex++;
+            showInitialAlert()
+            firstTimeViewAppears = false
+        }
     }
     
     //MARK: Custom Initialization Stuff
@@ -249,6 +254,62 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: Animation Stuff
     
+    func zoomInBars() {
+        //Obtenemos el centro del ObjectiveRect en el cual el usuario perdió
+        let rectCenter = activeObjectiveRect.center;
+        let viewCenter = view.center
+        let deltaVector = CGPoint(x: viewCenter.x - rectCenter.x, y: viewCenter.y - rectCenter.y)
+        var barsContainer: UIView!
+        
+        if container1IsLeft {
+            barsContainer = barsContainer1
+        } else {
+            barsContainer = barsContainer2
+        }
+        
+        UIView.animateWithDuration(2.0,
+            delay: 0.0,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: { () -> Void in
+                barsContainer.transform =
+                    CGAffineTransformConcat(CGAffineTransformMakeTranslation(deltaVector.x, deltaVector.y),
+                        CGAffineTransformMakeScale(4.0, 4.0))
+            }) { (success) -> Void in
+                self.viewIsZoomed = true
+                self.showViewVideoAlert()
+        }
+    }
+    
+    func zoomOutBars() {
+        var barsContainer: UIView!
+        if container1IsLeft {
+            barsContainer = barsContainer1
+        } else {
+            barsContainer = barsContainer2
+        }
+        
+        UIView.animateWithDuration(2.0,
+            delay: 0.0,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: { () -> Void in
+                barsContainer.transform = CGAffineTransformIdentity
+                //self.pixelLabel.alpha = 0.0
+                
+            }) { (succes) -> Void in
+                //self.pixelLabel.removeFromSuperview()
+                self.viewIsZoomed = false
+                if !self.userViewedVideo {
+                    self.showLostAlert()
+                    self.saveUserScore()
+                    self.checkAchievements()
+                } else {
+                    //User viewed video, turn the property no false 
+                    self.userViewedVideo = false
+                    self.showContinueGameAlert()
+                }
+        }
+    }
+    
     func animateContainerHorizontally() {
         
         var container1Frame = self.barsContainer1.frame;
@@ -334,32 +395,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         let touch = touches.anyObject() as UITouch
         if touches.count == 1 && gameActivated && touch.locationInView(view).y > 68.0 && !gamePaused {
-            if viewIsZoomed {
-                //Zooom out
-                var barsContainer: UIView!
-                if container1IsLeft {
-                    barsContainer = barsContainer1
-                } else {
-                    barsContainer = barsContainer2
-                }
-                
-                UIView.animateWithDuration(2.0,
-                    delay: 0.0,
-                    options: UIViewAnimationOptions.CurveEaseInOut,
-                    animations: { () -> Void in
-                        barsContainer.transform = CGAffineTransformIdentity
-                        self.pixelLabel.alpha = 0.0
-                        
-                    }) { (succes) -> Void in
-                        self.pixelLabel.removeFromSuperview()
-                        self.viewIsZoomed = false
-                        self.showLostAlert()
-                }
-
-                
-            } else {
-                checkIfUserWon()
-            }
+            checkIfUserWon()
         }
     }
 
@@ -456,36 +492,16 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             println("No alcanzé por \(pixelDifference) pixeles")
         }
         
-        if pixelDifference > 2 {
-            //Dont zoom because the difference was high
+        if pixelDifference > 3 || trainingModeActivated == true {
+            //Dont zoom because the difference was too high or we are in training mode
             showLostAlert()
             saveUserScore()
+            checkAchievements()
             return;
         }
         
-        //Obtenemos el centro del ObjectiveRect en el cual el usuario perdió
-        let rectCenter = activeObjectiveRect.center;
-        let viewCenter = view.center
-        let deltaVector = CGPoint(x: viewCenter.x - rectCenter.x, y: viewCenter.y - rectCenter.y)
-        var barsContainer: UIView!
-        
-        if container1IsLeft {
-            barsContainer = barsContainer1
-        } else {
-            barsContainer = barsContainer2
-        }
-        
-        UIView.animateWithDuration(2.0,
-            delay: 0.0,
-            options: UIViewAnimationOptions.CurveEaseInOut,
-            animations: { () -> Void in
-                barsContainer.transform =
-                    CGAffineTransformConcat(CGAffineTransformMakeTranslation(deltaVector.x, deltaVector.y),
-                                            CGAffineTransformMakeScale(4.0, 4.0))
-        }) { (success) -> Void in
-            self.viewIsZoomed = true
-            self.createPixelDiferenceLabel(Int(pixelDifference))
-        }
+        //If the user lost by few pixels, zoom in the bars and show the options
+        zoomInBars()
     }
     
     //MARK: UI Stuff
@@ -507,26 +523,6 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         dispatch_after(removeTime, dispatch_get_main_queue()) { () -> Void in
             particlesView.removeFromSuperview()
             println("Removiendooooooooo")
-        }
-    }
-    
-    func createPixelDiferenceLabel(pixelDifference: Int) {
-        pixelLabel = UILabel(frame: CGRect(x: 50.0, y: 100.0, width: view.bounds.size.width - 100.0, height: 60.0))
-        pixelLabel.text = "You lost by \(pixelDifference) pixels!"
-        pixelLabel.textColor = UIColor.lightGrayColor()
-        pixelLabel.textAlignment = NSTextAlignment.Center
-        pixelLabel.font = UIFont.systemFontOfSize(25.0)
-        pixelLabel.numberOfLines = 0
-        pixelLabel.alpha = 0.0
-        view.addSubview(pixelLabel)
-        
-        UIView.animateWithDuration(1.0,
-            delay: 0.0,
-            options: UIViewAnimationOptions.CurveEaseInOut,
-            animations: { () -> Void in
-                self.pixelLabel.alpha = 1.0
-        }) { (success) -> Void in
-            
         }
     }
     
@@ -644,6 +640,15 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: Saving Data
     
+    func checkAchievements() {
+        if trainingModeActivated == false {
+            if score >= 10000 && expertModeActivated == false {
+                println("***** DEBERIA DARLE EL ACHIEVEMENT DE 10000 EN ARCADE")
+                GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade10000")
+            }
+        }
+    }
+    
     func saveGamesLost() {
         if trainingModeActivated == false {
             UserData.sharedInstance().setGamesLost(gamesLost)
@@ -653,6 +658,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     func saveBarsCompleted() {
         if trainingModeActivated == false {
             UserData.sharedInstance().setBarsCompleted(barsCompleted)
+            GameKitHelper.sharedGameKitHelper().submitScore(Int64(barsCompleted), category: "Bars_Completed_Leaderboard")
         }
     }
     
@@ -685,9 +691,11 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             if expertModeActivated == true {
                 //We are playing the expert mode, so save the score to the expert field
                 UserData.sharedInstance().setExpertScore(score)
+                GameKitHelper.sharedGameKitHelper().submitScore(Int64(score), category: "Expert_Leaderboard")
             } else {
                 //We are playing the arcade mode, so save the score to the arcade field
                 UserData.sharedInstance().setScore(score)
+                GameKitHelper.sharedGameKitHelper().submitScore(Int64(score), category: "Arcade_Leaderboard")
             }
             
             //Update max score label
@@ -695,10 +703,38 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         }
     }
     
+    //MARK: Ads Stuff
+    
+    func setupVideoAd() {
+        VungleSDK.sharedSDK().delegate = self
+        VungleSDK.sharedSDK().playAd(self, error: nil)
+    }
+    
     //MARK: Alerts
+    
+    func showContinueGameAlert() {
+        let continueAlert = OneButtonAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 105.0, width: 250.0, height: 210.0))
+        continueAlert.acceptButtonTitle = "Continue!"
+        continueAlert.message = "Now you can continue playing the current game!"
+        continueAlert.delegate = self
+        continueAlert.showInView(view)
+    }
+    
+    func showViewVideoAlert() {
+        gameActivated = false
+        
+        let videoAlert = TwoButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 105.0, width: 250.0, height: 210.0))
+        videoAlert.tag = 2
+        videoAlert.leftButtonTitle = "Watch Video"
+        videoAlert.rightButtonTitle = "Finish Game"
+        videoAlert.message = "You missed by just few pixels! you can watch a video to continue the current game!"
+        videoAlert.delegate = self
+        videoAlert.showInView(view)
+    }
     
     func showInitialAlert() {
         let twoButtonsAlert = TwoButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 105.0, width: 250.0, height: 210.0))
+        twoButtonsAlert.tag = 1
         twoButtonsAlert.leftButtonTitle = "Start!"
         twoButtonsAlert.rightButtonTitle = "Exit"
         if trainingModeActivated == true {
@@ -739,18 +775,65 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: TwoButtonsAlertDelegate
     
-    func leftButtonPressedInGameOverAlert() {
-        gameWillBegin = true
-    }
-    
-    func rightButtonPressedInAlert() {
-        dismissVC()
-    }
-    
-    func twoButtonsAlertDidDissapear() {
-        if gameWillBegin {
-            gameActivated = true
-            startTimer()
+    func leftButtonPressedInAlert(alert: TwoButtonsAlert) {
+        if alert.tag == 1 {
+            gameWillBegin = true
+        } else if alert.tag == 2 {
+            //Video alert - Watch video button
+            setupVideoAd()
         }
+    }
+    
+    func rightButtonPressedInAlert(alert: TwoButtonsAlert) {
+        if alert.tag == 1 {
+            //Start game alert - exit button
+            dismissVC()
+        } else if alert.tag == 2 {
+            //Watch video alert - Restart button
+            zoomOutBars()
+        }
+    }
+    
+    func twoButtonsAlertDidDissapear(alert: TwoButtonsAlert) {
+        if alert.tag == 1 {
+            if gameWillBegin {
+                gameActivated = true
+                startTimer()
+            }
+        }
+    }
+    
+    //MARK: OneButtonAlertDelegate
+    
+    func acceptButtonPressedInAlert(alert: OneButtonAlert) {
+        gameActivated = true
+    }
+    
+    func oneButtonAlertDidDissapear(alert: OneButtonAlert) {
+        startTimer()
+    }
+    
+    //MARK: VungleSDKDelegate
+    
+    func vungleSDKhasCachedAdAvailable() {
+        println("La ad esta en cacheeeee")
+    }
+    
+    func vungleSDKwillShowAd() {
+        println("Mostraremos la adddddd")
+    }
+    
+    func vungleSDKwillCloseAdWithViewInfo(viewInfo: [NSObject : AnyObject]!, willPresentProductSheet: Bool) {
+        if !willPresentProductSheet {
+            println("Time to restart the state of the app")
+            userViewedVideo = true
+            zoomOutBars()
+        }
+    }
+    
+    func vungleSDKwillCloseProductSheet(productSheet: AnyObject!) {
+        println("Produc sheet closed, time to restart the state of the app")
+        userViewedVideo = true
+        zoomOutBars()
     }
 }

@@ -1,34 +1,27 @@
 //
-//  TwoButtonsAlert.swift
+//  OneButtonAlert.swift
 //  BarProto2
 //
-//  Created by Diego Fernando Vidal Illera on 11/25/14.
+//  Created by Diego Fernando Vidal Illera on 11/28/14.
 //  Copyright (c) 2014 iAm Studio. All rights reserved.
 //
 
 import UIKit
 
-protocol TwoButtonsAlertDelegate {
-    func leftButtonPressedInAlert(alert: TwoButtonsAlert)
-    func rightButtonPressedInAlert(alert: TwoButtonsAlert)
-    func twoButtonsAlertDidDissapear(alert: TwoButtonsAlert)
+protocol OneButtonAlertDelegate {
+    func acceptButtonPressedInAlert(alert: OneButtonAlert)
+    func oneButtonAlertDidDissapear(alert: OneButtonAlert)
 }
 
-class TwoButtonsAlert: UIView {
-    
-    let leftButton: UIButton!
-    let rightButton: UIButton!
+class OneButtonAlert: UIView {
+
+    let acceptButton: UIButton!
     let titleLabel: UILabel!
     var opacityView: UIView!
-    var delegate: TwoButtonsAlertDelegate?
-    var leftButtonTitle: String = "" {
+    var delegate: OneButtonAlertDelegate?
+    var acceptButtonTitle: String = "" {
         didSet {
-            leftButton.setTitle(leftButtonTitle, forState: .Normal)
-        }
-    }
-    var rightButtonTitle: String = "" {
-        didSet {
-            rightButton.setTitle(rightButtonTitle, forState: .Normal)
+            acceptButton.setTitle(acceptButtonTitle, forState: .Normal)
         }
     }
     
@@ -51,19 +44,12 @@ class TwoButtonsAlert: UIView {
         titleLabel.textAlignment = .Center
         addSubview(titleLabel)
         
-        leftButton = UIButton(frame: CGRect(x: 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
-        leftButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        leftButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
-        leftButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
-        leftButton.addTarget(self, action: "leftButtonPressed", forControlEvents: .TouchUpInside)
-        addSubview(leftButton)
-        
-        rightButton = UIButton(frame: CGRect(x: frame.size.width/2.0 + 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
-        rightButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        rightButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
-        rightButton.addTarget(self, action: "rightButtonPressed", forControlEvents: .TouchUpInside)
-        rightButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
-        addSubview(rightButton)
+        acceptButton = UIButton(frame: CGRect(x: frame.size.width/2.0 - 45.0, y: frame.size.height - 50.0, width: 90.0, height: 40.0))
+        acceptButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        acceptButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
+        acceptButton.addTarget(self, action: "acceptButtonPressed", forControlEvents: .TouchUpInside)
+        acceptButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        addSubview(acceptButton)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -105,24 +91,16 @@ class TwoButtonsAlert: UIView {
                 self.opacityView.alpha = 0.0
             }) { (success) -> Void in
                 if let theDelegate = self.delegate {
-                    theDelegate.twoButtonsAlertDidDissapear(self)
+                    theDelegate.oneButtonAlertDidDissapear(self)
                 }
                 self.opacityView.removeFromSuperview()
                 self.removeFromSuperview()
         }
     }
     
-    func leftButtonPressed() {
-        if let theDelegate = delegate {
-            theDelegate.leftButtonPressedInAlert(self)
-            closeAlert()
-        }
-    }
-    
-    func rightButtonPressed() {
-        println("Right butttonooon")
+    func acceptButtonPressed() {
         if let theDelegate =  delegate {
-            theDelegate.rightButtonPressedInAlert(self)
+            theDelegate.acceptButtonPressedInAlert(self)
             closeAlert()
         }
     }
