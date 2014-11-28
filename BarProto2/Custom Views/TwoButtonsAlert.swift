@@ -18,6 +18,7 @@ class TwoButtonsAlert: UIView {
     
     let leftButton: UIButton!
     let rightButton: UIButton!
+    let titleLabel: UILabel!
     var opacityView: UIView!
     var delegate: TwoButtonsAlertDelegate?
     var leftButtonTitle: String = "" {
@@ -31,14 +32,19 @@ class TwoButtonsAlert: UIView {
         }
     }
     
+    var message: String = "" {
+        didSet {
+            titleLabel.text = message
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.whiteColor()
         alpha = 0.0
         transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        let titleLabel = UILabel(frame: CGRect(x: 10.0, y: 10.0, width: frame.size.width - 20.0, height: 140.0))
-        titleLabel.text = "Bienvenido a Bars! Tendrás que parar cada barra dentro de los pequeños rectángulos. Toca en la pantalla para parar la barra. Entre mas color tenga una barra, mas rápido irá"
+        titleLabel = UILabel(frame: CGRect(x: 10.0, y: 10.0, width: frame.size.width - 20.0, height: 140.0))
         titleLabel.textColor = UIColor.lightGrayColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0

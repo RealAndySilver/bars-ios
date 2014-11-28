@@ -22,6 +22,7 @@ class MainMenuViewController: UIViewController {
     var goToArcadeGames = false
     var goToStatistics = false
     var goToExpertGames = false
+    var goToTrainingGames = false
     
     //MARK: View Lifecycle
     
@@ -59,9 +60,19 @@ class MainMenuViewController: UIViewController {
     
     //MARK: Actions 
     
+    
+    @IBAction func trainingButtonPressed(sender: AnyObject) {
+        goToArcadeGames = false
+        goToStatistics = false
+        goToTrainingGames = true
+        goToExpertGames = false
+        hiddeBarsAnimated()
+    }
+    
     @IBAction func expertButtonPressed(sender: AnyObject) {
         goToArcadeGames = false
         goToStatistics = false
+        goToTrainingGames = false
         goToExpertGames = true
         hiddeBarsAnimated()
     }
@@ -70,6 +81,7 @@ class MainMenuViewController: UIViewController {
         goToArcadeGames = true
         goToStatistics = false
         goToExpertGames = false
+        goToTrainingGames = false
         hiddeBarsAnimated()
     }
     
@@ -77,13 +89,24 @@ class MainMenuViewController: UIViewController {
         goToArcadeGames = false
         goToStatistics = true
         goToExpertGames = false
+        goToTrainingGames = false
         hiddeBarsAnimated()
+    }
+    
+    func goToTrainingVC() {
+        if let arcadeGameVC = storyboard?.instantiateViewControllerWithIdentifier("ArcadeGame") as? BarsViewController {
+            arcadeGameVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+            arcadeGameVC.trainingModeActivated = true
+            arcadeGameVC.expertModeActivated = false
+            presentViewController(arcadeGameVC, animated: true, completion: nil)
+        }
     }
     
     func goToArcadeGame() {
         if let arcadeGameVC = storyboard?.instantiateViewControllerWithIdentifier("ArcadeGame") as? BarsViewController {
             arcadeGameVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
             arcadeGameVC.expertModeActivated = false
+            arcadeGameVC.trainingModeActivated = false
             presentViewController(arcadeGameVC, animated: true, completion: nil)
         }
     }
@@ -92,6 +115,7 @@ class MainMenuViewController: UIViewController {
         if let arcadeGameVC = storyboard?.instantiateViewControllerWithIdentifier("ArcadeGame") as? BarsViewController {
             arcadeGameVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
             arcadeGameVC.expertModeActivated = true
+            arcadeGameVC.trainingModeActivated = false
             presentViewController(arcadeGameVC, animated: true, completion: nil)
         }
     }
@@ -121,6 +145,8 @@ class MainMenuViewController: UIViewController {
                 self.goToStatisticsVC()
             } else if self.goToExpertGames {
                 self.goToExpertMode()
+            } else if self.goToTrainingGames {
+                self.goToTrainingVC()
             }
         }
     }

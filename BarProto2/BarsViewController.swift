@@ -10,6 +10,9 @@ import UIKit
 
 class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate {
 
+    @IBOutlet weak var littleScoreLabel: UILabel!
+    @IBOutlet weak var littleMaxScoreLabel: UILabel!
+    @IBOutlet weak var littleBarsLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var containerUI: UIView!
     @IBOutlet weak var highScoreLabel: UILabel!
@@ -37,6 +40,12 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var barsCompleted = UserData.sharedInstance().getBarsCompleted()
     var gamesLost = UserData.sharedInstance().getGamesLost()
     var expertModeActivated: Bool!
+    var trainingModeActivated: Bool!
+    var gamePaused = false
+    
+    //Training mode UI
+    var slider: UISlider!
+    var playButton: UIButton!
     
     //Get a random color for the objective bar
     let palettesArray = AppColors.sharedInstance().getPatternColors()
@@ -65,6 +74,10 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         for index in 0...9 {
             if expertModeActivated == true {
                 speedsArray[index] = 7
+                
+            } else if trainingModeActivated == true {
+                    speedsArray[index] = 3
+            
             } else {
                 var randomSpeed = Int(arc4random()%5 + 3)
                 speedsArray[index] = randomSpeed
@@ -98,6 +111,34 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             let highScore = UserData.sharedInstance().getScore()
             highScoreLabel.text = "\(highScore)"
         }
+        
+        //Check if we are in the training mode, hidde all the unnecessary UI
+        if trainingModeActivated == true {
+            countingLabel.hidden = true
+            highScoreLabel.hidden = true
+            timeLabel.hidden = true
+            littleBarsLabel.hidden = true
+            littleScoreLabel.text = "Speed"
+            littleMaxScoreLabel.hidden = true
+            
+            //Create a Slider to control the speed 
+            slider = UISlider(frame: CGRect(x: 20.0, y: 20.0, width: view.bounds.size.width - 90.0, height: 25.0))
+            slider.continuous = false;
+            slider.minimumValue = 3.0
+            slider.maximumValue = 7.0
+            slider.addTarget(self, action: "sliderTouched", forControlEvents: UIControlEvents.TouchDown)
+            slider.minimumTrackTintColor = AppColors.sharedInstance().getPatternColors().first?.last
+            slider.addTarget(self, action: "sliderValueChanged:", forControlEvents: .ValueChanged)
+            view.addSubview(slider)
+            
+            //Create a button to pause and start the movement
+            playButton = UIButton(frame: CGRect(x: view.bounds.size.width - 65.0, y: 0.0, width: 60.0, height: containerUI.frame.size.height))
+            playButton.setTitle("Pause", forState: .Normal)
+            playButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            playButton.titleLabel?.font = UIFont.boldSystemFontOfSize(13.0)
+            playButton.addTarget(self, action: "playPauseButtonPressed", forControlEvents: .TouchUpInside)
+            view.addSubview(playButton)
+        }
     }
     
     func setupContainer(barContainer: UIView, asInitialContainer: Bool) {
@@ -130,7 +171,56 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         }
     }
     
-    //MARK: Navigation 
+    //MARK: Actions
+    
+    func sliderTouched() {
+        println("Me tocarooon")
+        gamePaused = true
+        playButton.setTitle("Play", forState: .Normal)
+        stopTimer()
+    }
+    
+    func sliderValueChanged(theSlider: UISlider) {
+        let roundedValue = roundf(theSlider.value)
+        theSlider.value = roundedValue
+        println("Valor redondeado: \(roundedValue)")
+        setupNewSpeedsValue(Int(roundedValue))
+        setupNewBarsColors()
+    }
+    
+    func playPauseButtonPressed() {
+        gamePaused = !gamePaused
+        if gamePaused {
+            playButton.setTitle("Play", forState: .Normal)
+            stopTimer()
+        } else {
+            playButton.setTitle("Pause", forState: .Normal)
+            startTimer()
+        }
+    }
+    
+    func setupNewSpeedsValue(value: Int) {
+        for index in 0...speedsArray.count - 1 {
+            speedsArray[index] = value
+        }
+    }
+    
+    func setupNewBarsColors() {
+        //Setup colors of the container 1
+        for index in 1...5 {
+            if let barView = barsContainer1.viewWithTag(index) {
+                barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3]
+            }
+        }
+        
+        for index in 6...10 {
+            if let barView = barsContainer2.viewWithTag(index) {
+                barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3]
+            }
+        }
+    }
+    
+    //MARK: Navigation
     
     func dismissVC() {
         dismissViewControllerAnimated(true, completion: nil)
@@ -242,7 +332,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Touches Handling
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        if touches.count == 1 && gameActivated{
+        let touch = touches.anyObject() as UITouch
+        if touches.count == 1 && gameActivated && touch.locationInView(view).y > 68.0 && !gamePaused {
             if viewIsZoomed {
                 //Zooom out
                 var barsContainer: UIView!
@@ -448,6 +539,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func setBarsToOriginInContainer(barsContainer: UIView, initialIndex: Int, finalIndex: Int) {
         let randomPalette = Int(arc4random()%UInt32(palettesArray.count))
+        selectedPalette = randomPalette
         for index in initialIndex...finalIndex {
             if let barView = barsContainer.viewWithTag(index) {
                 barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
@@ -467,14 +559,14 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func setContainer1BarsToOrigin() {
-        if expertModeActivated == false {
+        if expertModeActivated == false && trainingModeActivated == false {
             randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
         }
         setBarsToOriginInContainer(barsContainer1, initialIndex: 1, finalIndex: 5)
     }
     
     func setContainer2BarsToOrigin() {
-        if expertModeActivated == false {
+        if expertModeActivated == false && trainingModeActivated == false {
             randomizeSpeedsBetweenLowIndex(5, maxIndex: 9)
         }
         setBarsToOriginInContainer(barsContainer2, initialIndex: 6, finalIndex: 10)
@@ -506,11 +598,11 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Game Resetting 
     
     func resetBarsContainer(barsContainer: UIView, initIndex: Int, finalIndex: Int) {
-        let randomPalette = Int(arc4random()%UInt32(palettesArray.count))
+        selectedPalette = Int(arc4random()%UInt32(palettesArray.count))
         for index in initIndex...finalIndex {
             if let barView = barsContainer.viewWithTag(index) {
                 barView.transform = CGAffineTransformMakeTranslation(0.0, 0.0)
-                barView.backgroundColor = palettesArray[randomPalette][speedsArray[index - 1] - 3] as UIColor
+                barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3] as UIColor
             }
             
             if let objectiveBar = barsContainer.viewWithTag(index + 1000) {
@@ -520,7 +612,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
                 randomHeight += 67
                 newFrame.origin.y = CGFloat(randomHeight)
                 objectiveBar.frame = newFrame
-                objectiveBar.backgroundColor = objBarColors[randomPalette].colorWithAlphaComponent(0.7)
+                objectiveBar.backgroundColor = objBarColors[selectedPalette].colorWithAlphaComponent(0.7)
             }
         }
         startTimer()
@@ -535,7 +627,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         if self.container1IsLeft {
             //Perdiste estando en el container 1
             activeBarIndex = 1
-            if expertModeActivated == false {
+            if expertModeActivated == false  && trainingModeActivated == false {
                 randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
             }
             resetBarsContainer(barsContainer1, initIndex: 1, finalIndex: 5)
@@ -543,7 +635,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         } else {
             //Perdiste estando en el container 2
             activeBarIndex = 6
-            if expertModeActivated == false {
+            if expertModeActivated == false && trainingModeActivated == false {
                 randomizeSpeedsBetweenLowIndex(5, maxIndex: 9)
             }
             resetBarsContainer(barsContainer2, initIndex: 6, finalIndex: 10)
@@ -553,15 +645,21 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Saving Data
     
     func saveGamesLost() {
-        UserData.sharedInstance().setGamesLost(gamesLost)
+        if trainingModeActivated == false {
+            UserData.sharedInstance().setGamesLost(gamesLost)
+        }
     }
     
     func saveBarsCompleted() {
-        UserData.sharedInstance().setBarsCompleted(barsCompleted)
+        if trainingModeActivated == false {
+            UserData.sharedInstance().setBarsCompleted(barsCompleted)
+        }
     }
     
     func saveTotalTouches() {
-        UserData.sharedInstance().setTotalTouches(totalTouches)
+        if trainingModeActivated == false {
+            UserData.sharedInstance().setTotalTouches(totalTouches)
+        }
     }
     
     func userBeatHighScore() -> Bool {
@@ -583,7 +681,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func saveUserScore() {
-        if userBeatHighScore() {
+        if userBeatHighScore() && trainingModeActivated == false {
             if expertModeActivated == true {
                 //We are playing the expert mode, so save the score to the expert field
                 UserData.sharedInstance().setExpertScore(score)
@@ -597,23 +695,23 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         }
     }
     
-    /*func getUserScore() -> Int {
-        return UserData.sharedInstance().getScore()
-    }*/
-    
     //MARK: Alerts
     
     func showInitialAlert() {
         let twoButtonsAlert = TwoButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 105.0, width: 250.0, height: 210.0))
         twoButtonsAlert.leftButtonTitle = "Start!"
         twoButtonsAlert.rightButtonTitle = "Exit"
+        if trainingModeActivated == true {
+            twoButtonsAlert.message = "Modo Entrenamiento! Usa el Slider superior para controlar la velocidad de las barras. Toca en la pantalla para parar la barra dentro del pequeño recuadro."
+        } else {
+            twoButtonsAlert.message = "Bienvenido a Bars! Tendrás que parar cada barra dentro de los pequeños rectángulos. Toca en la pantalla para parar la barra. Entre mas color tenga una barra, mas rápido irá"
+        }
+
         twoButtonsAlert.delegate = self
         twoButtonsAlert.showInView(view)
     }
     
     func showLostAlert() {
-        println("ENTRE AL SHOW LOST ALERT")
-        
         gameActivated = false
         
         let gameOverAlert = GameOverAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 100.0, width: 250.0, height: 200.0))
@@ -621,7 +719,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         gameOverAlert.titleText = "Score"
         gameOverAlert.delegate = self
         
-        if userBeatHighScore() {
+        if userBeatHighScore() && trainingModeActivated == false {
             gameOverAlert.userDidHighScore = true
             gameOverAlert.titleText = "High Score!"
         }
