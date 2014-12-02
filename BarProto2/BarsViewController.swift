@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate, VungleSDKDelegate, OneButtonAlertDelegate {
+class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate, VungleSDKDelegate, OneButtonAlertDelegate, UIAlertViewDelegate, ThreeButtonsAlertDelegate, BuyCoinsViewDelegate {
     
     @IBOutlet weak var littleScoreLabel: UILabel!
     @IBOutlet weak var littleMaxScoreLabel: UILabel!
@@ -22,7 +22,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var score: Int = 0
     var barsContainer1: UIView!
     var barsContainer2: UIView!
-    var container1IsLeft = true
+    var pixelLabel: UILabel!
     var activeBarIndex: Int = 0;
     var barsTimer: NSTimer!
     var barSpeed: CGFloat = 4.0
@@ -32,18 +32,20 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var correctBars = 0
     var speedsArray: Array<Int> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     var viewIsZoomed = false
-    var pixelLabel: UILabel!
     var gameActivated = false
     var gameWillBegin = false
     var newHighScore = false
+    var gamePaused = false
+    var firstTimeViewAppears = true
+    var userViewedVideoOrUsedCoin = false
+    var container1IsLeft = true
     var totalTouches = UserData.sharedInstance().getTotalTouches()
     var barsCompleted = UserData.sharedInstance().getBarsCompleted()
     var gamesLost = UserData.sharedInstance().getGamesLost()
     var expertModeActivated: Bool!
     var trainingModeActivated: Bool!
-    var gamePaused = false
-    var firstTimeViewAppears = true
-    var userViewedVideo = false
+   
+    var videoAlert: ThreeButtonsAlert!
     
     //Training mode UI
     var slider: UISlider!
@@ -54,12 +56,18 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     let objBarColors = AppColors.sharedInstance().getObjBarColors()
     var selectedPalette: Int!
     
+    ////////////////////////////////////////////////////////////////////////////////////////////
     //MARK: View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        VungleSDK.sharedSDK().delegate = self
         view.backgroundColor = UIColor.whiteColor()
+        
+        //Choose a random color pallete for the initial bars
         selectedPalette = Int(arc4random()%UInt32(palettesArray.count))
+        
+        //Setup the initial speeds of the bars
         setupSpeeds()
         setupUI()
     }
@@ -67,6 +75,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if firstTimeViewAppears {
+            //This is the first time the view appears, so display the initial alert
             activeBarIndex++;
             showInitialAlert()
             firstTimeViewAppears = false
@@ -76,14 +85,18 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Custom Initialization Stuff
     
     func setupSpeeds() {
+        //Go through all the speeds in our array (There are 10 speed values because there are 10 bars)
         for index in 0...9 {
             if expertModeActivated == true {
+                //If we are in expert mode, all the speed are going to have the max value
                 speedsArray[index] = 7
                 
             } else if trainingModeActivated == true {
-                    speedsArray[index] = 3
+                //If we are in training mode, initially all the bars will have the min value
+                speedsArray[index] = 3
             
             } else {
+                //If we are in arcade mode, randomize the speeds
                 var randomSpeed = Int(arc4random()%5 + 3)
                 speedsArray[index] = randomSpeed
             }
@@ -91,6 +104,10 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func setupUI() {
+        //Set the text of our coins label with the current stored coins
+        timeLabel.text = "\(UserData.sharedInstance().getCoins())"
+        
+        //Setup the two containers of our bars. Each container will have 5 bars inside
         barsContainer1 = UIView(frame: CGRect(x: 0.0, y: 0.0, width: view.bounds.size.width, height: view.bounds.size.height))
         barsContainer2 = UIView(frame: CGRect(x: view.bounds.size.width, y: 0.0, width: view.bounds.size.width, height: view.bounds.size.height))
         setupContainer(barsContainer1, asInitialContainer: true)
@@ -117,7 +134,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             highScoreLabel.text = "\(highScore)"
         }
         
-        //Check if we are in the training mode, hidde all the unnecessary UI
+        //If we are in the training mode, hidde all the unnecessary UI
         if trainingModeActivated == true {
             countingLabel.hidden = true
             highScoreLabel.hidden = true
@@ -136,7 +153,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             slider.addTarget(self, action: "sliderValueChanged:", forControlEvents: .ValueChanged)
             view.addSubview(slider)
             
-            //Create a button to pause and start the movement
+            //Create a button to pause and start the bars movement
             playButton = UIButton(frame: CGRect(x: view.bounds.size.width - 65.0, y: 0.0, width: 60.0, height: containerUI.frame.size.height))
             playButton.setTitle("Pause", forState: .Normal)
             playButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -152,23 +169,32 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         
         var initialIndex: Int
         if asInitialContainer {
+            //We are configuring the initial container (the container that is displayed when the view appears)
+            //The index of the bars will go from 0 to 4
             initialIndex = 0
         } else {
+            //We are configuring the second container (The container that is displayed when we complete the first
+            //five bars. The index of the bars in this container will go from 5 to 9)
             initialIndex = 5
         }
         
+        //The bars width will be the screen width divided by five
         let barWidth: CGFloat = (view.bounds.size.width - 12.0)/5.0
-        let randomPalette = Int(arc4random()%3)
         
+        //Iterate to create the five bars and the five small rects in the container
         for index in 0...4 {
-            var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
-            randomHeight += 67
-            
+            //Create the bar
             let barView = UIView(frame: CGRect(x:2*CGFloat(index + 1) + CGFloat(index) * barWidth, y: view.bounds.size.height - 180.0, width: barWidth, height: view.bounds.size.height + 10.0))
             barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index + initialIndex] - 3]
             barView.tag = index + initialIndex + 1
             barContainer.addSubview(barView)
             
+            //Randomize the Y Position of the small rects and add 67 pixels to avoid the rects to be hidden 
+            //when a notification gets displayed on the device
+            var randomHeight = arc4random()%UInt32(view.bounds.size.height - 367.0)
+            randomHeight += 67
+            
+            //Create the small rect
             let objectiveRect = UIView(frame: CGRect(x: barView.frame.origin.x, y: CGFloat(randomHeight), width: barWidth, height: 30.0))
             objectiveRect.backgroundColor = objBarColors[selectedPalette].colorWithAlphaComponent(0.7)
             objectiveRect.tag = 1001 + index + initialIndex
@@ -178,17 +204,23 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: Actions
     
+    /////////////////////////////////////////////////////////////////////////////////
+    //Actions just for the training mode
+    
     func sliderTouched() {
-        println("Me tocarooon")
+        //Pause the training mode when the user touches the slider
         gamePaused = true
         playButton.setTitle("Play", forState: .Normal)
         stopTimer()
     }
     
     func sliderValueChanged(theSlider: UISlider) {
+        //Get a rounded speed value from the slider value
         let roundedValue = roundf(theSlider.value)
         theSlider.value = roundedValue
         println("Valor redondeado: \(roundedValue)")
+        
+        //Setup everything based on our new speed value
         setupNewSpeedsValue(Int(roundedValue))
         setupNewBarsColors()
     }
@@ -196,34 +228,41 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     func playPauseButtonPressed() {
         gamePaused = !gamePaused
         if gamePaused {
+            //Pause the game
             playButton.setTitle("Play", forState: .Normal)
             stopTimer()
         } else {
+            //Activate the game
             playButton.setTitle("Pause", forState: .Normal)
             startTimer()
         }
     }
     
     func setupNewSpeedsValue(value: Int) {
+        //Go through our speed array and set all the speeds to the new value 
+        //assign on the slider
         for index in 0...speedsArray.count - 1 {
             speedsArray[index] = value
         }
     }
     
     func setupNewBarsColors() {
-        //Setup colors of the container 1
+        //Setup colors of the bars inside the first container
         for index in 1...5 {
             if let barView = barsContainer1.viewWithTag(index) {
                 barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3]
             }
         }
         
+        //Setup the colors of the bars inside the second container
         for index in 6...10 {
             if let barView = barsContainer2.viewWithTag(index) {
                 barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3]
             }
         }
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////
     
     //MARK: Navigation
     
@@ -267,9 +306,9 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             barsContainer = barsContainer2
         }
         
-        UIView.animateWithDuration(2.0,
+        UIView.animateWithDuration(1.0,
             delay: 0.0,
-            options: UIViewAnimationOptions.CurveEaseInOut,
+            options: UIViewAnimationOptions.CurveEaseOut,
             animations: { () -> Void in
                 barsContainer.transform =
                     CGAffineTransformConcat(CGAffineTransformMakeTranslation(deltaVector.x, deltaVector.y),
@@ -288,9 +327,9 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             barsContainer = barsContainer2
         }
         
-        UIView.animateWithDuration(2.0,
+        UIView.animateWithDuration(1.0,
             delay: 0.0,
-            options: UIViewAnimationOptions.CurveEaseInOut,
+            options: UIViewAnimationOptions.CurveEaseOut,
             animations: { () -> Void in
                 barsContainer.transform = CGAffineTransformIdentity
                 //self.pixelLabel.alpha = 0.0
@@ -298,13 +337,13 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             }) { (succes) -> Void in
                 //self.pixelLabel.removeFromSuperview()
                 self.viewIsZoomed = false
-                if !self.userViewedVideo {
+                if !self.userViewedVideoOrUsedCoin {
                     self.showLostAlert()
                     self.saveUserScore()
                     self.checkAchievements()
                 } else {
                     //User viewed video, turn the property no false 
-                    self.userViewedVideo = false
+                    //self.userViewedVideo = false
                     self.showContinueGameAlert()
                 }
         }
@@ -467,9 +506,6 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func userLost() {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //AUN NO HAS HECHO EL MECANISMO PARA GUARDADO DE SCORE CUANDO SE HACE ZOOM A LA BARRA
-        //POR AHORA EL SCORE SOLO SE ESTA GUARDANDO CUANDO NO SE HACE EL ZOOM
         saveTotalTouches()
         saveBarsCompleted()
         gamesLost++
@@ -492,8 +528,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             println("No alcanzé por \(pixelDifference) pixeles")
         }
         
-        if pixelDifference > 3 || trainingModeActivated == true {
-            //Dont zoom because the difference was too high or we are in training mode
+        if pixelDifference > 6 || trainingModeActivated == true || userViewedVideoOrUsedCoin {
+            //Dont zoom because the difference was too high or we are in training mode or we already watched a video
             showLostAlert()
             saveUserScore()
             checkAchievements()
@@ -527,8 +563,11 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func updateLabel() {
-        timeLabel.text = "\(correctBars)"
         countingLabel.countFromCurrentValueTo(Float(score), withDuration: 0.4)
+    }
+    
+    func updateCoins(coins: Int) {
+        timeLabel.text = "\(coins)"
     }
     
     //MARK: Resetting bar positions
@@ -616,6 +655,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func resetGame() {
         gameActivated = true
+        userViewedVideoOrUsedCoin = false
         correctBars = 0
         score = 0
         updateLabel()
@@ -642,9 +682,58 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func checkAchievements() {
         if trainingModeActivated == false {
-            if score >= 10000 && expertModeActivated == false {
-                println("***** DEBERIA DARLE EL ACHIEVEMENT DE 10000 EN ARCADE")
-                GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade10000")
+            if expertModeActivated == false {
+                //Check the Arcade Achievements
+                if score >= 10000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade10000")
+                }
+                
+                if score >= 50000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade50000")
+                }
+                
+                if score >= 100000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade100000")
+                }
+                
+                if score >= 250000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade250000")
+                }
+                
+                if score >= 500000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade500000")
+                }
+                
+                if score >= 1000000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Arcade1000000")
+                }
+            
+            } else {
+                //Check the Expert achievements
+                if score >= 10000 {
+                    println("***** DEBERIA DARLE EL ACHIEVEMENT DE 10000 EN ARCADE")
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Expert10000")
+                }
+                
+                if score >= 50000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Expert50000")
+                }
+                
+                if score >= 100000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Expert100000")
+                }
+                
+                if score >= 250000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Expert250000")
+                }
+                
+                if score >= 500000 {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Expert500000")
+                }
+                
+                if (score >= 1000000) {
+                    GameKitHelper.sharedGameKitHelper().reportAchievementWithID("Expert1000000")
+                }
             }
         }
     }
@@ -706,11 +795,24 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Ads Stuff
     
     func setupVideoAd() {
-        VungleSDK.sharedSDK().delegate = self
-        VungleSDK.sharedSDK().playAd(self, error: nil)
+        //let error = NSErrorPointer()
+        println("Info del debugging: \(VungleSDK.sharedSDK().debugInfo())")
+        if VungleSDK.sharedSDK().isCachedAdAvailable() {
+            VungleSDK.sharedSDK().playAd(self, error: nil)
+        } else {
+            println("No hay publicidad para mostrar")
+            UIAlertView(title: "Oops!", message: "There's no video available right now. Please try again in a moment.", delegate: self, cancelButtonTitle: "Ok").show()
+        }
     }
     
     //MARK: Alerts
+    
+    func showBuyAlertWithProducts(products: Array<IAPProduct>) {
+        let buyView = BuyCoinsView(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 175.0, width: 250.0, height: 350.0))
+        buyView.delegate = self
+        buyView.productsArray = products
+        buyView.showInView(view)
+    }
     
     func showContinueGameAlert() {
         let continueAlert = OneButtonAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 105.0, width: 250.0, height: 210.0))
@@ -722,12 +824,12 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func showViewVideoAlert() {
         gameActivated = false
-        
-        let videoAlert = TwoButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 105.0, width: 250.0, height: 210.0))
-        videoAlert.tag = 2
-        videoAlert.leftButtonTitle = "Watch Video"
-        videoAlert.rightButtonTitle = "Finish Game"
-        videoAlert.message = "You missed by just few pixels! you can watch a video to continue the current game!"
+    
+        videoAlert = ThreeButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 165.0, width: 250.0, height: 330.0))
+        videoAlert.firstButtonTitle = "Watch Video"
+        videoAlert.secondButtonTitle = "Use Coin (\(UserData.sharedInstance().getCoins()) left)"
+        videoAlert.thirdButtonTitle = "Finish Game"
+        videoAlert.message = "You missed by just few pixels! you can watch a video or use a coin to continue the current game!"
         videoAlert.delegate = self
         videoAlert.showInView(view)
     }
@@ -773,24 +875,66 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         dismissVC()
     }
     
+    //MARK: ThreeButtonsAlertDelegate
+    
+    func firstButtonPressedInAlert(alert: ThreeButtonsAlert) {
+        //Watch video
+        setupVideoAd()
+    }
+    
+    func secondButtonPressedInAlert(alert: ThreeButtonsAlert) {
+        //Use Coins
+        let coins = UserData.sharedInstance().getCoins()
+        if coins > 0 {
+            userViewedVideoOrUsedCoin = true
+            alert.closeAlert()
+            zoomOutBars()
+            UserData.sharedInstance().setCoins(coins - 1)
+            updateCoins(coins - 1)
+            
+        } else {
+            //UIAlertView(title: "Oops!", message: "You don't have coins available.", delegate: self, cancelButtonTitle: "OK").show()
+            //The user doesn't have coins available. Get the In-App Purchases and show the buy alert 
+            MBProgressHUD.showHUDAddedTo(view, animated: true)
+            CPIAPHelper.sharedInstance().requestProductsWithCompletionHandler({ (success, products) -> Void in
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                if success {
+                    let productsArray = products as Array<IAPProduct>
+                    self.showBuyAlertWithProducts(productsArray)
+                    /*for index in 0...productsArray.count - 1 {
+                        let product = productsArray[index] as IAPProduct
+                        println("Nombre del producto: \(product.skProduct.localizedTitle)")
+                        println("Precio del producto: \(product.skProduct.priceAsString(product.skProduct.price))")
+                    }*/
+                }
+            })
+        }
+    }
+    
+    func thirdButtonPressedInAlert(alert: ThreeButtonsAlert) {
+        //Finish game
+        zoomOutBars()
+        alert.closeAlert()
+    }
+    
+    func threeButtonsAlertDidDissapear() {
+        
+    }
+    
     //MARK: TwoButtonsAlertDelegate
     
     func leftButtonPressedInAlert(alert: TwoButtonsAlert) {
         if alert.tag == 1 {
             gameWillBegin = true
-        } else if alert.tag == 2 {
-            //Video alert - Watch video button
-            setupVideoAd()
-        }
+            alert.closeAlert()
+        } 
     }
     
     func rightButtonPressedInAlert(alert: TwoButtonsAlert) {
         if alert.tag == 1 {
             //Start game alert - exit button
             dismissVC()
-        } else if alert.tag == 2 {
-            //Watch video alert - Restart button
-            zoomOutBars()
+            alert.closeAlert()
         }
     }
     
@@ -813,6 +957,16 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         startTimer()
     }
     
+    //MARK: BuyCoinsViewDelegate
+    
+    func UserBoughtCoinsSuccessfully(totalCoins: Int) {
+        //Update the coins label in the game view 
+        updateCoins(totalCoins)
+        
+        //Update the use coins button in the alert
+        videoAlert.secondButtonTitle = "Use Coin (\(totalCoins) left)"
+    }
+    
     //MARK: VungleSDKDelegate
     
     func vungleSDKhasCachedAdAvailable() {
@@ -826,14 +980,16 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     func vungleSDKwillCloseAdWithViewInfo(viewInfo: [NSObject : AnyObject]!, willPresentProductSheet: Bool) {
         if !willPresentProductSheet {
             println("Time to restart the state of the app")
-            userViewedVideo = true
+            userViewedVideoOrUsedCoin = true
+            videoAlert.closeAlert()
             zoomOutBars()
         }
     }
     
     func vungleSDKwillCloseProductSheet(productSheet: AnyObject!) {
         println("Produc sheet closed, time to restart the state of the app")
-        userViewedVideo = true
+        userViewedVideoOrUsedCoin = true
+        videoAlert.closeAlert()
         zoomOutBars()
     }
 }

@@ -38,15 +38,18 @@ class GameOverAlert: UIView {
         alpha = 0.0
         transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        titleLabel = UILabel(frame: CGRect(x: 20.0, y: 10.0, width: frame.size.width - 40.0, height: 30.0))
+        titleLabel = UILabel(frame: CGRect(x: 20.0, y: 20.0, width: frame.size.width - 40.0, height: 30.0))
         titleLabel.textColor = UIColor.lightGrayColor()
-        titleLabel.font = UIFont.boldSystemFontOfSize(25.0)
+        //titleLabel.backgroundColor = UIColor.cyanColor()
+        titleLabel.font = UIFont.boldSystemFontOfSize(20.0)
         titleLabel.textAlignment = .Center
         addSubview(titleLabel)
         
-        barsLabel = UILabel(frame: CGRect(x: 10.0, y: frame.size.height/2.0 - 25.0, width: frame.size.width - 20.0, height: 50.0))
+        barsLabel = UILabel(frame: CGRect(x: 10.0, y: frame.size.height/2.0 - 42.0, width: frame.size.width - 20.0, height: 70.0))
         barsLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
-        barsLabel.font = UIFont.boldSystemFontOfSize(40.0)
+        barsLabel.font = UIFont.boldSystemFontOfSize(60.0)
+        barsLabel.adjustsFontSizeToFitWidth = true
+        //barsLabel.backgroundColor = UIColor.redColor()
         barsLabel.textAlignment = .Center
         addSubview(barsLabel)
         

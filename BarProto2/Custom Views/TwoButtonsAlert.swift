@@ -115,7 +115,7 @@ class TwoButtonsAlert: UIView {
     func leftButtonPressed() {
         if let theDelegate = delegate {
             theDelegate.leftButtonPressedInAlert(self)
-            closeAlert()
+            //closeAlert()
         }
     }
     
@@ -123,7 +123,7 @@ class TwoButtonsAlert: UIView {
         println("Right butttonooon")
         if let theDelegate =  delegate {
             theDelegate.rightButtonPressedInAlert(self)
-            closeAlert()
+            //closeAlert()
         }
     }
 }

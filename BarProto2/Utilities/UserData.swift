@@ -23,6 +23,11 @@ class UserData: NSObject {
     
     //Setters
     
+    func setCoins(coins: Int) {
+        NSUserDefaults.standardUserDefaults().setObject(coins, forKey: "coins")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
     func setScore(score: Int) {
         NSUserDefaults.standardUserDefaults().setObject(score, forKey: "score")
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -49,6 +54,19 @@ class UserData: NSObject {
     }
     
     //Getters 
+    
+    func getCoins() -> Int {
+        let coins = NSUserDefaults.standardUserDefaults().objectForKey("coins") as Int?
+        if let theCoins = coins {
+            return theCoins
+            
+        } else {
+            //No se habían guardado las monedas, guardémolas 
+            NSUserDefaults.standardUserDefaults().setObject(5, forKey: "coins")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            return 5
+        }
+    }
     
     func getScore() -> Int {
         let score = NSUserDefaults.standardUserDefaults().objectForKey("score") as Int?

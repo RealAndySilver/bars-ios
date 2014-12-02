@@ -6,3 +6,7 @@
 #import "DWFParticleView.h"
 #import <VungleSDK/VungleSDK.h>
 #import "GameKitHelper.h"
+#import "CPIAPHelper.h"
+#import "IAPProduct.h"
+#import "MBProgressHUD.h"
+#import "SKProduct+PriceAsString.h"

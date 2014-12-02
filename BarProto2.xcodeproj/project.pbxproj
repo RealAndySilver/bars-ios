@@ -25,6 +25,13 @@
 		A05128E71A23AA8B00892993 /* Colors.plist in Resources */ = {isa = PBXBuildFile; fileRef = A05128E61A23AA8B00892993 /* Colors.plist */; };
 		A05128EA1A23B16200892993 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05128E91A23B16200892993 /* AppColors.swift */; };
 		A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05128EB1A23DC9B00892993 /* GameOverAlert.swift */; };
+		A069003F1A2CFD5F0037B6FD /* ThreeButtonsAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A069003E1A2CFD5F0037B6FD /* ThreeButtonsAlert.swift */; };
+		A082AE531A2E0A0900F0B1F9 /* CPIAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A082AE4E1A2E0A0900F0B1F9 /* CPIAPHelper.m */; };
+		A082AE541A2E0A0900F0B1F9 /* IAPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A082AE501A2E0A0900F0B1F9 /* IAPHelper.m */; };
+		A082AE551A2E0A0900F0B1F9 /* IAPProduct.m in Sources */ = {isa = PBXBuildFile; fileRef = A082AE521A2E0A0900F0B1F9 /* IAPProduct.m */; };
+		A082AE591A2E0DF500F0B1F9 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A082AE581A2E0DF500F0B1F9 /* MBProgressHUD.m */; };
+		A082AE5C1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.m in Sources */ = {isa = PBXBuildFile; fileRef = A082AE5B1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.m */; };
+		A082AE5E1A2E188500F0B1F9 /* BuyCoinsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A082AE5D1A2E188500F0B1F9 /* BuyCoinsView.swift */; };
 		A08FAEEA1A24CCB20085603F /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08FAEE91A24CCB20085603F /* MainMenuViewController.swift */; };
 		A0EB23CC1A28C5490077665D /* __vungle.db in Resources */ = {isa = PBXBuildFile; fileRef = A0EB23C51A28C5490077665D /* __vungle.db */; };
 		A0EB23CD1A28C5490077665D /* vg_close.png in Resources */ = {isa = PBXBuildFile; fileRef = A0EB23C61A28C5490077665D /* vg_close.png */; };
@@ -83,6 +90,18 @@
 		A05128E61A23AA8B00892993 /* Colors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Colors.plist; sourceTree = "<group>"; };
 		A05128E91A23B16200892993 /* AppColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppColors.swift; path = Utilities/AppColors.swift; sourceTree = "<group>"; };
 		A05128EB1A23DC9B00892993 /* GameOverAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameOverAlert.swift; path = "Custom Views/GameOverAlert.swift"; sourceTree = "<group>"; };
+		A069003E1A2CFD5F0037B6FD /* ThreeButtonsAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ThreeButtonsAlert.swift; path = "Custom Views/ThreeButtonsAlert.swift"; sourceTree = "<group>"; };
+		A082AE4D1A2E0A0900F0B1F9 /* CPIAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPIAPHelper.h; sourceTree = "<group>"; };
+		A082AE4E1A2E0A0900F0B1F9 /* CPIAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPIAPHelper.m; sourceTree = "<group>"; };
+		A082AE4F1A2E0A0900F0B1F9 /* IAPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPHelper.h; sourceTree = "<group>"; };
+		A082AE501A2E0A0900F0B1F9 /* IAPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPHelper.m; sourceTree = "<group>"; };
+		A082AE511A2E0A0900F0B1F9 /* IAPProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPProduct.h; sourceTree = "<group>"; };
+		A082AE521A2E0A0900F0B1F9 /* IAPProduct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPProduct.m; sourceTree = "<group>"; };
+		A082AE571A2E0DF500F0B1F9 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		A082AE581A2E0DF500F0B1F9 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		A082AE5A1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+PriceAsString.h"; sourceTree = "<group>"; };
+		A082AE5B1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProduct+PriceAsString.m"; sourceTree = "<group>"; };
+		A082AE5D1A2E188500F0B1F9 /* BuyCoinsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BuyCoinsView.swift; path = "Custom Views/BuyCoinsView.swift"; sourceTree = "<group>"; };
 		A08FAEE91A24CCB20085603F /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		A0EB23C51A28C5490077665D /* __vungle.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = __vungle.db; sourceTree = "<group>"; };
 		A0EB23C61A28C5490077665D /* vg_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vg_close.png; sourceTree = "<group>"; };
@@ -168,6 +187,7 @@
 		8BAB19641A1B87AE00138C2F /* BarProto2 */ = {
 			isa = PBXGroup;
 			children = (
+				A082AE4C1A2E0A0900F0B1F9 /* InApp Purchases */,
 				A0EB23EC1A28FB9F0077665D /* GameCenter */,
 				A05128D41A23824200892993 /* Libraries */,
 				A05128E81A23B12800892993 /* ObjC Classes */,
@@ -221,6 +241,8 @@
 				A05128EB1A23DC9B00892993 /* GameOverAlert.swift */,
 				A0063C971A24E1B5002B73F0 /* TwoButtonsAlert.swift */,
 				A0EB23EA1A28DB550077665D /* OneButtonAlert.swift */,
+				A069003E1A2CFD5F0037B6FD /* ThreeButtonsAlert.swift */,
+				A082AE5D1A2E188500F0B1F9 /* BuyCoinsView.swift */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -228,6 +250,7 @@
 		A05128D41A23824200892993 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A082AE561A2E0DF500F0B1F9 /* MBProgressHUD2 */,
 				A05128D51A23824F00892993 /* UICountingLabel */,
 			);
 			name = Libraries;
@@ -250,6 +273,30 @@
 				A05128DE1A2390A500892993 /* DWFParticleView.m */,
 			);
 			name = "ObjC Classes";
+			sourceTree = "<group>";
+		};
+		A082AE4C1A2E0A0900F0B1F9 /* InApp Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				A082AE4D1A2E0A0900F0B1F9 /* CPIAPHelper.h */,
+				A082AE4E1A2E0A0900F0B1F9 /* CPIAPHelper.m */,
+				A082AE4F1A2E0A0900F0B1F9 /* IAPHelper.h */,
+				A082AE501A2E0A0900F0B1F9 /* IAPHelper.m */,
+				A082AE511A2E0A0900F0B1F9 /* IAPProduct.h */,
+				A082AE521A2E0A0900F0B1F9 /* IAPProduct.m */,
+				A082AE5A1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.h */,
+				A082AE5B1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.m */,
+			);
+			path = "InApp Purchases";
+			sourceTree = "<group>";
+		};
+		A082AE561A2E0DF500F0B1F9 /* MBProgressHUD2 */ = {
+			isa = PBXGroup;
+			children = (
+				A082AE571A2E0DF500F0B1F9 /* MBProgressHUD.h */,
+				A082AE581A2E0DF500F0B1F9 /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD2;
 			sourceTree = "<group>";
 		};
 		A0EB23C31A28C5490077665D /* VungleSDK.embeddedframework */ = {
@@ -413,19 +460,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A082AE541A2E0A0900F0B1F9 /* IAPHelper.m in Sources */,
 				A08FAEEA1A24CCB20085603F /* MainMenuViewController.swift in Sources */,
 				A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */,
+				A082AE531A2E0A0900F0B1F9 /* CPIAPHelper.m in Sources */,
 				8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */,
 				A0EB23EF1A28FB9F0077665D /* GameKitHelper.m in Sources */,
 				A05128DF1A2390A500892993 /* DWFParticleView.m in Sources */,
 				A05128D81A23824F00892993 /* UICountingLabel.m in Sources */,
+				A082AE551A2E0A0900F0B1F9 /* IAPProduct.m in Sources */,
 				A0EB23EB1A28DB550077665D /* OneButtonAlert.swift in Sources */,
 				A0063C9C1A2513D7002B73F0 /* StatisticsViewController.swift in Sources */,
 				A0063C981A24E1B5002B73F0 /* TwoButtonsAlert.swift in Sources */,
+				A082AE5E1A2E188500F0B1F9 /* BuyCoinsView.swift in Sources */,
+				A069003F1A2CFD5F0037B6FD /* ThreeButtonsAlert.swift in Sources */,
+				A082AE591A2E0DF500F0B1F9 /* MBProgressHUD.m in Sources */,
 				A05128EA1A23B16200892993 /* AppColors.swift in Sources */,
 				8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */,
 				A0063C9A1A24EFEE002B73F0 /* UserData.swift in Sources */,
 				8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */,
+				A082AE5C1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
