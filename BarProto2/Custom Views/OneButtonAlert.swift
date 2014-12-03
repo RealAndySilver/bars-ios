@@ -37,7 +37,7 @@ class OneButtonAlert: UIView {
         alpha = 0.0
         transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        titleLabel = UILabel(frame: CGRect(x: 10.0, y: 10.0, width: frame.size.width - 20.0, height: 140.0))
+        titleLabel = UILabel(frame: CGRect(x: 10.0, y: 20.0, width: frame.size.width - 20.0, height: 60.0))
         titleLabel.textColor = UIColor.lightGrayColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0

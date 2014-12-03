@@ -41,8 +41,8 @@ class TwoButtonsAlert: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.whiteColor()
-        alpha = 0.0
-        transform = CGAffineTransformMakeScale(0.5, 0.5)
+        //alpha = 0.0
+        //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         titleLabel = UILabel(frame: CGRect(x: 10.0, y: 10.0, width: frame.size.width - 20.0, height: 140.0))
         titleLabel.textColor = UIColor.lightGrayColor()
@@ -82,13 +82,21 @@ class TwoButtonsAlert: UIView {
         opacityView.alpha = 0.0
         theView.addSubview(opacityView)
         
+        var newFrame = frame
+        newFrame.origin.y = theView.frame.size.height
+        frame = newFrame
+        
+        var middlePosFrame = frame
+        middlePosFrame.origin.y = theView.frame.size.height/2.0 - frame.size.height/2.0
+        
         theView.addSubview(self)
         UIView.animateWithDuration(0.3,
             delay: 0.0,
-            options: .CurveLinear,
+            options: .CurveEaseOut,
             animations: { () -> Void in
-                self.alpha = 1.0
-                self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                //self.alpha = 1.0
+                //self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                self.frame = middlePosFrame
                 self.opacityView.alpha = 0.7
             }) { (success) -> Void in
                 
@@ -96,12 +104,16 @@ class TwoButtonsAlert: UIView {
     }
     
     func closeAlert() {
+        var finalPosFrame = frame
+        finalPosFrame.origin.y = superview!.frame.size.height
+        
         UIView.animateWithDuration(0.2,
             delay: 0.0,
             options: .CurveLinear,
             animations: { () -> Void in
-                self.alpha = 0.0
-                self.transform = CGAffineTransformMakeScale(0.5, 0.5)
+                //self.alpha = 0.0
+                //self.transform = CGAffineTransformMakeScale(0.5, 0.5)
+                self.frame = finalPosFrame
                 self.opacityView.alpha = 0.0
             }) { (success) -> Void in
                 if let theDelegate = self.delegate {

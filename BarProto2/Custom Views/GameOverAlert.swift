@@ -11,10 +11,12 @@ import UIKit
 protocol GameOverAlertDelegate {
     func restartButtonPressedInGameOverAlert()
     func exitButtonPressedInAlert()
+    func gameOverAlertDidDisappearFromResetting()
 }
 
 class GameOverAlert: UIView {
     
+    var resetButtonSelected = false
     var opacityView: UIView!
     var barsLabel: UILabel!
     var titleLabel: UILabel!
@@ -35,8 +37,8 @@ class GameOverAlert: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.whiteColor()
-        alpha = 0.0
-        transform = CGAffineTransformMakeScale(0.5, 0.5)
+        //alpha = 1.0
+        //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         titleLabel = UILabel(frame: CGRect(x: 20.0, y: 20.0, width: frame.size.width - 40.0, height: 30.0))
         titleLabel.textColor = UIColor.lightGrayColor()
@@ -87,6 +89,7 @@ class GameOverAlert: UIView {
     //MARK: Actions
     
     func restartButtonPressed() {
+        resetButtonSelected = true
         if let theDelegate = delegate {
             theDelegate.restartButtonPressedInGameOverAlert()
             closeAlert()
@@ -94,20 +97,37 @@ class GameOverAlert: UIView {
     }
     
     func closeAlert() {
+        var lastPosFrame = frame
+        lastPosFrame.origin.x = superview!.frame.size.width
+        
         UIView.animateWithDuration(0.2,
             delay: 0.0,
-            options: .CurveLinear,
+            options: .CurveEaseIn,
             animations: { () -> Void in
-                self.alpha = 0.0
-                self.transform = CGAffineTransformMakeScale(0.5, 0.5)
+                //self.alpha = 0.0
+                //self.transform = CGAffineTransformMakeScale(0.5, 0.5)
+                self.frame = lastPosFrame
                 self.opacityView.alpha = 0.0
         }) { (success) -> Void in
+            if let theDelegate = self.delegate {
+                if self.resetButtonSelected {
+                    theDelegate.gameOverAlertDidDisappearFromResetting()
+                }
+            }
             self.opacityView.removeFromSuperview()
             self.removeFromSuperview()
         }
     }
     
     func showInView(theView: UIView) {
+        var newFrame = frame
+        newFrame.origin.x = -frame.size.width
+        frame = newFrame
+        
+        var middlePosFrame = frame
+        middlePosFrame.origin.x = theView.frame.size.width/2.0 - frame.size.width/2.0
+        
+        
         opacityView = UIView(frame: theView.bounds)
         opacityView.backgroundColor = UIColor.blackColor()
         opacityView.alpha = 0.0
@@ -116,10 +136,11 @@ class GameOverAlert: UIView {
         theView.addSubview(self)
         UIView.animateWithDuration(0.3,
             delay: 0.0,
-            options: .CurveLinear,
+            options: .CurveEaseOut,
             animations: { () -> Void in
-                self.alpha = 1.0
-                self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                //self.alpha = 1.0
+                //self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                self.frame = middlePosFrame
                 self.opacityView.alpha = 0.7
         }) { (success) -> Void in
             if self.userDidHighScore {

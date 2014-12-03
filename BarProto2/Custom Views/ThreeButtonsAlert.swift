@@ -48,10 +48,10 @@ class ThreeButtonsAlert: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.whiteColor()
-        alpha = 0.0
-        transform = CGAffineTransformMakeScale(0.5, 0.5)
+        //alpha = 0.0
+        //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        titleLabel = UILabel(frame: CGRect(x: 10.0, y: 10.0, width: frame.size.width - 20.0, height: 140.0))
+        titleLabel = UILabel(frame: CGRect(x: 25.0, y: 0.0, width: frame.size.width - 50.0, height: 140.0))
         titleLabel.textColor = UIColor.lightGrayColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
@@ -74,7 +74,7 @@ class ThreeButtonsAlert: UIView {
         
         thirdButton = UIButton(frame: CGRectOffset(secondButton.frame, 0.0, secondButton.frame.size.height + 10.0))
         thirdButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        thirdButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
+        thirdButton.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
         thirdButton.addTarget(self, action: "thirdButtonPressed", forControlEvents: .TouchUpInside)
         thirdButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
         addSubview(thirdButton)
@@ -97,12 +97,21 @@ class ThreeButtonsAlert: UIView {
         theView.addSubview(opacityView)
         
         theView.addSubview(self)
+        
+        var newFrame = frame
+        newFrame.origin.x = theView.frame.size.width
+        frame = newFrame
+        
+        var middlePosFrame = frame
+        middlePosFrame.origin.x = theView.frame.size.width/2.0 - frame.size.width/2.0
+        
         UIView.animateWithDuration(0.3,
             delay: 0.0,
-            options: .CurveLinear,
+            options: .CurveEaseOut,
             animations: { () -> Void in
-                self.alpha = 1.0
-                self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                //self.alpha = 1.0
+                //self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                self.frame = middlePosFrame
                 self.opacityView.alpha = 0.7
             }) { (success) -> Void in
                 
@@ -110,12 +119,16 @@ class ThreeButtonsAlert: UIView {
     }
     
     func closeAlert() {
+        var finalPosFrame = frame
+        finalPosFrame.origin.x = -frame.size.width
+        
         UIView.animateWithDuration(0.2,
             delay: 0.0,
-            options: .CurveLinear,
+            options: .CurveEaseIn,
             animations: { () -> Void in
-                self.alpha = 0.0
-                self.transform = CGAffineTransformMakeScale(0.5, 0.5)
+                //self.alpha = 0.0
+                //self.transform = CGAffineTransformMakeScale(0.5, 0.5)
+                self.frame = finalPosFrame
                 self.opacityView.alpha = 0.0
             }) { (success) -> Void in
                 if let theDelegate = self.delegate {
