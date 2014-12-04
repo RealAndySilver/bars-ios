@@ -44,14 +44,14 @@ class TwoButtonsAlert: UIView {
         //alpha = 0.0
         //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        titleLabel = UILabel(frame: CGRect(x: 10.0, y: 10.0, width: frame.size.width - 20.0, height: 140.0))
+        titleLabel = UILabel(frame: CGRect(x: 20.0, y: 16.0, width: frame.size.width - 40.0, height: 140.0))
         titleLabel.textColor = UIColor.lightGrayColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .Justified
         addSubview(titleLabel)
         
-        leftButton = UIButton(frame: CGRect(x: 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
+        leftButton = UIButton(frame: CGRect(x: 20.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
         leftButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         leftButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
         leftButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
@@ -60,7 +60,7 @@ class TwoButtonsAlert: UIView {
         
         rightButton = UIButton(frame: CGRect(x: frame.size.width/2.0 + 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
         rightButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        rightButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
+        rightButton.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
         rightButton.addTarget(self, action: "rightButtonPressed", forControlEvents: .TouchUpInside)
         rightButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
         addSubview(rightButton)

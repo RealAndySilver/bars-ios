@@ -16,6 +16,9 @@
 		8BAB196F1A1B87AE00138C2F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BAB196E1A1B87AE00138C2F /* Images.xcassets */; };
 		8BAB19721A1B87AE00138C2F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAB19701A1B87AE00138C2F /* LaunchScreen.xib */; };
 		8BAB197E1A1B87AE00138C2F /* BarProto2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB197D1A1B87AE00138C2F /* BarProto2Tests.swift */; };
+		8BB5B8AA1A309ABE0096CA4D /* libFlurry_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB5B8A51A309ABE0096CA4D /* libFlurry_5.4.0.a */; };
+		8BB5B8AB1A309ABE0096CA4D /* libFlurryAds_5.4.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB5B8A91A309ABE0096CA4D /* libFlurryAds_5.4.0.a */; };
+		8BB5B8AD1A309AFE0096CA4D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB5B8AC1A309AFE0096CA4D /* Security.framework */; };
 		A0063C981A24E1B5002B73F0 /* TwoButtonsAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0063C971A24E1B5002B73F0 /* TwoButtonsAlert.swift */; };
 		A0063C9A1A24EFEE002B73F0 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0063C991A24EFEE002B73F0 /* UserData.swift */; };
 		A0063C9C1A2513D7002B73F0 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0063C9B1A2513D7002B73F0 /* StatisticsViewController.swift */; };
@@ -79,6 +82,12 @@
 		8BAB19771A1B87AE00138C2F /* BarProto2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarProto2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BAB197C1A1B87AE00138C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8BAB197D1A1B87AE00138C2F /* BarProto2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarProto2Tests.swift; sourceTree = "<group>"; };
+		8BB5B8A41A309ABE0096CA4D /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
+		8BB5B8A51A309ABE0096CA4D /* libFlurry_5.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.4.0.a; sourceTree = "<group>"; };
+		8BB5B8A71A309ABE0096CA4D /* FlurryAdDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAdDelegate.h; sourceTree = "<group>"; };
+		8BB5B8A81A309ABE0096CA4D /* FlurryAds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAds.h; sourceTree = "<group>"; };
+		8BB5B8A91A309ABE0096CA4D /* libFlurryAds_5.4.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAds_5.4.0.a; sourceTree = "<group>"; };
+		8BB5B8AC1A309AFE0096CA4D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		A0063C971A24E1B5002B73F0 /* TwoButtonsAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TwoButtonsAlert.swift; path = "Custom Views/TwoButtonsAlert.swift"; sourceTree = "<group>"; };
 		A0063C991A24EFEE002B73F0 /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserData.swift; path = Utilities/UserData.swift; sourceTree = "<group>"; };
 		A0063C9B1A2513D7002B73F0 /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BB5B8AD1A309AFE0096CA4D /* Security.framework in Frameworks */,
 				A0EB23E81A28C5CA0077665D /* SystemConfiguration.framework in Frameworks */,
 				A0EB23E61A28C5C60077665D /* StoreKit.framework in Frameworks */,
 				A0EB23E41A28C5BD0077665D /* MediaPlayer.framework in Frameworks */,
@@ -141,6 +151,8 @@
 				A0EB23D81A28C56F0077665D /* AVFoundation.framework in Frameworks */,
 				A0EB23D61A28C5670077665D /* AudioToolbox.framework in Frameworks */,
 				A0EB23D41A28C5620077665D /* AdSupport.framework in Frameworks */,
+				8BB5B8AB1A309ABE0096CA4D /* libFlurryAds_5.4.0.a in Frameworks */,
+				8BB5B8AA1A309ABE0096CA4D /* libFlurry_5.4.0.a in Frameworks */,
 				A0EB23D21A28C5490077665D /* VungleSDK.framework in Frameworks */,
 				8B4D33E21A1FADAD002924E4 /* QuartzCore.framework in Frameworks */,
 			);
@@ -187,6 +199,8 @@
 		8BAB19641A1B87AE00138C2F /* BarProto2 */ = {
 			isa = PBXGroup;
 			children = (
+				8BB5B8A31A309ABE0096CA4D /* Flurry */,
+				8BB5B8A61A309ABE0096CA4D /* FlurryAds */,
 				A082AE4C1A2E0A0900F0B1F9 /* InApp Purchases */,
 				A0EB23EC1A28FB9F0077665D /* GameCenter */,
 				A05128D41A23824200892993 /* Libraries */,
@@ -233,6 +247,25 @@
 				8BAB197C1A1B87AE00138C2F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8BB5B8A31A309ABE0096CA4D /* Flurry */ = {
+			isa = PBXGroup;
+			children = (
+				8BB5B8A41A309ABE0096CA4D /* Flurry.h */,
+				8BB5B8A51A309ABE0096CA4D /* libFlurry_5.4.0.a */,
+			);
+			path = Flurry;
+			sourceTree = "<group>";
+		};
+		8BB5B8A61A309ABE0096CA4D /* FlurryAds */ = {
+			isa = PBXGroup;
+			children = (
+				8BB5B8A71A309ABE0096CA4D /* FlurryAdDelegate.h */,
+				8BB5B8A81A309ABE0096CA4D /* FlurryAds.h */,
+				8BB5B8A91A309ABE0096CA4D /* libFlurryAds_5.4.0.a */,
+			);
+			path = FlurryAds;
 			sourceTree = "<group>";
 		};
 		A0063C961A24E188002B73F0 /* Custom Views */ = {
@@ -324,6 +357,7 @@
 		A0EB23E91A28C5FC0077665D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8BB5B8AC1A309AFE0096CA4D /* Security.framework */,
 				A0EB23E71A28C5CA0077665D /* SystemConfiguration.framework */,
 				A0EB23E51A28C5C60077665D /* StoreKit.framework */,
 				A0EB23E31A28C5BD0077665D /* MediaPlayer.framework */,
@@ -612,6 +646,11 @@
 				);
 				INFOPLIST_FILE = BarProto2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BarProto2/Flurry",
+					"$(PROJECT_DIR)/BarProto2/FlurryAds",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7d5f34d5-d6bb-4cfc-8318-1031faf824f1";
 				SWIFT_OBJC_BRIDGING_HEADER = "BarProto2/BarProto2-Bridging-Header.h";
@@ -631,6 +670,11 @@
 				);
 				INFOPLIST_FILE = BarProto2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/BarProto2/Flurry",
+					"$(PROJECT_DIR)/BarProto2/FlurryAds",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "BarProto2/BarProto2-Bridging-Header.h";

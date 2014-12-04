@@ -8,9 +8,8 @@
 
 import UIKit
 
-class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate, VungleSDKDelegate, OneButtonAlertDelegate, UIAlertViewDelegate, ThreeButtonsAlertDelegate, BuyCoinsViewDelegate {
+class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAlertDelegate, VungleSDKDelegate, OneButtonAlertDelegate, UIAlertViewDelegate, ThreeButtonsAlertDelegate, BuyCoinsViewDelegate, GKGameCenterControllerDelegate {
     
-    @IBOutlet weak var coinsLabel: UILabel!
     @IBOutlet weak var littleScoreLabel: UILabel!
     @IBOutlet weak var littleMaxScoreLabel: UILabel!
     @IBOutlet weak var littleBarsLabel: UILabel!
@@ -26,7 +25,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var barsContainer2: UIView!
     var pixelLabel: UILabel!
     var activeBarIndex: Int = 0;
-    var barsTimer: NSTimer!
+    var barsTimer: NSTimer?
     var barSpeed: CGFloat = 4.0
     var increaseSpeedFactor: CGFloat = 0.0
     var activeBar: UIView!
@@ -83,6 +82,9 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             activeBarIndex++;
             showInitialAlert()
             firstTimeViewAppears = false
+            
+            //Set FlurryAds
+            FlurryAds.setAdDelegate(self)
         }
     }
     
@@ -108,9 +110,10 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func setupUI() {
-        //Set the text of our coins label with the current stored coins
-        coinsLabel.text = "Coins: \(UserData.sharedInstance().getCoins())"
+        //Coins label
+        highScoreLabel.text = "\(UserData.sharedInstance().getCoins())"
         timeLabel.text = "0"
+        
         //Setup the two containers of our bars. Each container will have 5 bars inside
         barsContainer1 = UIView(frame: CGRect(x: 0.0, y: 0.0, width: view.bounds.size.width, height: view.bounds.size.height))
         barsContainer2 = UIView(frame: CGRect(x: view.bounds.size.width, y: 0.0, width: view.bounds.size.width, height: view.bounds.size.height))
@@ -128,25 +131,16 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         containerUI.addSubview(countingLabel)
         
         //Setup the "Tap to begin" label
-        tapLabel = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 100.0, y: view.frame.size.height/2.0 - 100.0, width: 200.0, height: 200.0))
+        tapLabel = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 100.0, y: view.frame.size.height/2.0 - 70.0, width: 200.0, height: 200.0))
         tapLabel.text = "Get Ready!\nTap to begin!"
         tapLabel.numberOfLines = 0
-        tapLabel.textColor = UIColor.darkGrayColor()
-        tapLabel.font = UIFont.systemFontOfSize(20.0)
+        tapLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
+        tapLabel.font = UIFont.boldSystemFontOfSize(25.0)
         tapLabel.textAlignment = .Center
         tapLabel.alpha = 0.0
+        tapLabel.shadowColor = UIColor.whiteColor()
+        tapLabel.shadowOffset = CGSize(width: 1.0, height: 1.0)
         view.addSubview(tapLabel)
-        
-        if expertModeActivated == true {
-            //Show the expert score 
-            let highScore = UserData.sharedInstance().getExpertScore()
-            highScoreLabel.text = "\(highScore)"
-            
-        } else {
-            //Show the arcade high score
-            let highScore = UserData.sharedInstance().getScore()
-            highScoreLabel.text = "\(highScore)"
-        }
         
         //If we are in the training mode, hidde all the unnecessary UI
         if trainingModeActivated == true {
@@ -154,7 +148,6 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             highScoreLabel.hidden = true
             timeLabel.hidden = true
             littleBarsLabel.hidden = true
-            coinsLabel.hidden = true
             littleScoreLabel.text = "Speed"
             littleMaxScoreLabel.hidden = true
             
@@ -176,10 +169,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             playButton.addTarget(self, action: "playPauseButtonPressed", forControlEvents: .TouchUpInside)
             containerUI.addSubview(playButton)
         }
-        
         view.bringSubviewToFront(containerUI)
-        view.bringSubviewToFront(coinsLabel)
-        
     }
     
     func setupContainer(barContainer: UIView, asInitialContainer: Bool) {
@@ -292,7 +282,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Game Start & Stop
     
     func stopTimer() {
-        barsTimer.invalidate()
+        barsTimer?.invalidate()
     }
     
     func startTimer() {
@@ -357,7 +347,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
                 //self.pixelLabel.removeFromSuperview()
                 self.viewIsZoomed = false
                 if !self.userViewedVideoOrUsedCoin {
-                    self.showLostAlert()
+                    //self.showLostAlert()
+                    self.showTapLabel()
                     self.saveUserScore()
                     self.checkAchievements()
                 } else {
@@ -455,7 +446,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         
         //println("ACTIVE BAR INDEX: \(activeBarIndex)")
         
-        if touches.count == 1 && readyToBeginGame {
+        if touches.count == 1 && readyToBeginGame && touch.locationInView(view).y > 68.0 {
             readyToBeginGame = false
             hiddeTapLabel()
             gameActivated = true
@@ -568,7 +559,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             println("No alcanzé por \(pixelDifference) pixeles")
         }
         
-        if pixelDifference > 40 || trainingModeActivated == true || userViewedVideoOrUsedCoin {
+        if pixelDifference > 6 || trainingModeActivated == true || userViewedVideoOrUsedCoin {
             //Dont zoom because the difference was too high or we are in training mode or we already watched a video
             showLostAlert()
             saveUserScore()
@@ -608,7 +599,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func updateCoins(coins: Int) {
-        coinsLabel.text = "Coins: \(coins)"
+        highScoreLabel.text = "\(coins)"
     }
     
     //MARK: Resetting bar positions
@@ -722,6 +713,14 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: Saving Data
     
+    func giveCoinsToUser() {
+        var currentCoins = UserData.sharedInstance().getCoins()
+        currentCoins += 5
+        UserData.sharedInstance().setCoins(currentCoins)
+        
+        updateCoins(currentCoins)
+    }
+    
     func checkAchievements() {
         if trainingModeActivated == false {
             if expertModeActivated == false {
@@ -830,7 +829,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             }
             
             //Update max score label
-            highScoreLabel.text = "\(score)"
+            //highScoreLabel.text = "\(score)"
         }
     }
     
@@ -872,7 +871,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     //MARK: Alerts
     
     func showBuyAlertWithProducts(products: Array<IAPProduct>) {
-        let buyView = BuyCoinsView(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 175.0, width: 250.0, height: 350.0))
+        let buyView = BuyCoinsView(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 210.0, width: 250.0, height: 420.0))
         buyView.delegate = self
         buyView.productsArray = products
         buyView.showInView(view)
@@ -889,12 +888,13 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     func showViewVideoAlert() {
         gameActivated = false
     
-        videoAlert = ThreeButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 165.0, width: 250.0, height: 330.0))
-        videoAlert.firstButtonTitle = "Watch Video"
-        videoAlert.secondButtonTitle = "Use Coin (\(UserData.sharedInstance().getCoins()) left)"
-        videoAlert.thirdButtonTitle = "Finish Game"
+        videoAlert = ThreeButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 210.0, width: 250.0, height: 420.0))
+        videoAlert.firstButtonTitle = "Watch Video (Gift: 5 Coins)"
+        videoAlert.secondButtonTitle = "Use Coins (5 Required)"
+        videoAlert.thirdButtonTitle = "Restart Game"
         videoAlert.message = "You missed by just a few pixels! you can watch a video or use a coin to continue the current game!"
         videoAlert.delegate = self
+        videoAlert.currentScoreLabel.text = "\(score)"
         videoAlert.showInView(view)
     }
     
@@ -913,13 +913,33 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         twoButtonsAlert.showInView(view)
     }
     
+    func showAd() {
+        /*if FlurryAds.adReadyForSpace("TopBanner") {
+            FlurryAds.displayAdForSpace("TopBanner", onView: view, viewControllerForPresentation: self)
+        }*/
+        FlurryAds.fetchAndDisplayAdForSpace("TopBanner", view: view, viewController: self, size: BANNER_TOP)
+    }
+    
+    func hiddeAd() {
+        FlurryAds.removeAdFromSpace("TopBanner")
+    }
+    
     func showLostAlert() {
+        showAd()
         gameActivated = false
         
-        let gameOverAlert = GameOverAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 100.0, width: 250.0, height: 200.0))
+        let gameOverAlert = GameOverAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 110.0, width: 250.0, height: 220.0))
         gameOverAlert.score = score
         gameOverAlert.titleText = "Score"
         gameOverAlert.delegate = self
+        
+        if expertModeActivated == true {
+            gameOverAlert.bestScore = "\(UserData.sharedInstance().getExpertScore())"
+        } else if trainingModeActivated == true {
+            gameOverAlert.bestScore = "---"
+        } else {
+            gameOverAlert.bestScore = "\(UserData.sharedInstance().getScore())"
+        }
         
         if userBeatHighScore() && trainingModeActivated == false {
             gameOverAlert.userDidHighScore = true
@@ -931,7 +951,15 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: GameOVerAlertDelegate
     
+    func rankingsButtonPressedInAlert() {
+        let gameCenterVC = GKGameCenterViewController()
+        gameCenterVC.viewState = GKGameCenterViewControllerState.Leaderboards
+        gameCenterVC.gameCenterDelegate = self
+        presentViewController(gameCenterVC, animated: true, completion: nil)
+    }
+    
     func restartButtonPressedInGameOverAlert() {
+        hiddeAd()
         resetGame()
         showTapLabel()
     }
@@ -941,6 +969,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
         
     func exitButtonPressedInAlert() {
+        hiddeAd()
         dismissVC()
     }
     
@@ -981,9 +1010,17 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func thirdButtonPressedInAlert(alert: ThreeButtonsAlert) {
-        //Finish game
+        //Restart game
+        saveUserScore()
+        resetGame()
         zoomOutBars()
         alert.closeAlert()
+    }
+    
+    func fourthButtonPressedInAlert(alert: ThreeButtonsAlert) {
+        //Exit game
+        saveUserScore()
+        dismissVC()
     }
     
     func threeButtonsAlertDidDissapear() {
@@ -1028,15 +1065,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func oneButtonAlertDidDissapear(alert: OneButtonAlert) {
-        //Start the game after the user watched video or used coins
-        //Start in the next bar 
         
-        /*activeBarIndex++
-        if (activeBarIndex == 6 || activeBarIndex == 11) {
-            animateContainerHorizontally()
-        } else {
-            startTimer()
-        }*/
     }
     
     //MARK: BuyCoinsViewDelegate
@@ -1065,6 +1094,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             userViewedVideoOrUsedCoin = true
             videoAlert.closeAlert()
             zoomOutBars()
+            giveCoinsToUser()
         }
     }
     
@@ -1073,5 +1103,12 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         userViewedVideoOrUsedCoin = true
         videoAlert.closeAlert()
         zoomOutBars()
+        giveCoinsToUser()
+    }
+    
+    //MARK: GameCenterDelegate
+    
+    func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController!) {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }

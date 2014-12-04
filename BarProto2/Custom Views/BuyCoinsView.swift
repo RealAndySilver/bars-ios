@@ -32,7 +32,7 @@ class BuyCoinsView: UIView {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "transactionFailedReceived", name: "TransactionFailedNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDidBuyLives", name: "UserDidSuscribe", object: nil)
         
-        let titleLabel = UILabel(frame: CGRect(x: 20.0, y: 20.0, width: frame.size.width - 40.0, height: 70.0))
+        let titleLabel = UILabel(frame: CGRect(x: 20.0, y: 30.0, width: frame.size.width - 40.0, height: 70.0))
         titleLabel.text = "You don't have enough coins! Would you like to buy some?"
         titleLabel.textColor = UIColor.lightGrayColor()
         titleLabel.numberOfLines = 0
@@ -40,7 +40,7 @@ class BuyCoinsView: UIView {
         titleLabel.textAlignment = .Center
         addSubview(titleLabel)
         
-        let coinImageView = UIImageView(frame: CGRect(x: frame.size.width/2.0 - 50.0, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 20.0, width: 100.0, height: 100.0))
+        let coinImageView = UIImageView(frame: CGRect(x: frame.size.width/2.0 - 75.0, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 20.0, width: 150.0, height: 150.0))
         coinImageView.layer.cornerRadius = coinImageView.bounds.size.width/2.0
         coinImageView.image = UIImage(named: "Coin")
         coinImageView.clipsToBounds = true

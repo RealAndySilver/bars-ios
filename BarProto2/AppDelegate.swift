@@ -17,6 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        //Configure Flurry
+        Flurry.startSession("3SB7XNPZBCMXMG8BS6X8")
+        FlurryAds.initialize(window?.rootViewController)
+        
         //Configure Vungle Ads
         let appID = "com.iamstudio.bars"
         let vungleSDK = VungleSDK.sharedSDK()

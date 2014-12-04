@@ -12,6 +12,7 @@ protocol ThreeButtonsAlertDelegate {
     func firstButtonPressedInAlert(alert: ThreeButtonsAlert)
     func secondButtonPressedInAlert(alert: ThreeButtonsAlert)
     func thirdButtonPressedInAlert(alert: ThreeButtonsAlert)
+    func fourthButtonPressedInAlert(alert: ThreeButtonsAlert)
     func threeButtonsAlertDidDissapear()
 }
 
@@ -21,6 +22,7 @@ class ThreeButtonsAlert: UIView {
     let secondButton: UIButton!
     let thirdButton: UIButton!
     let titleLabel: UILabel!
+    let currentScoreLabel: UILabel!
     var opacityView: UIView!
     var delegate: ThreeButtonsAlertDelegate?
     var firstButtonTitle: String = "" {
@@ -51,7 +53,22 @@ class ThreeButtonsAlert: UIView {
         //alpha = 0.0
         //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        titleLabel = UILabel(frame: CGRect(x: 25.0, y: 0.0, width: frame.size.width - 50.0, height: 140.0))
+        let scoreLabel = UILabel(frame: CGRect(x: 25.0, y: 20.0, width: frame.size.width - 50.0, height: 30.0))
+        scoreLabel.text = "Score"
+        scoreLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last?
+        scoreLabel.textAlignment = .Center
+        scoreLabel.font = UIFont.systemFontOfSize(17.0)
+        addSubview(scoreLabel)
+        
+        currentScoreLabel = UILabel(frame: CGRect(x: 25.0, y: scoreLabel.frame.origin.y + scoreLabel.frame.size.height, width: frame.size.width - 50.0, height: 35.0))
+        currentScoreLabel.text = "120.000"
+        currentScoreLabel.adjustsFontSizeToFitWidth = true
+        currentScoreLabel.font = UIFont.boldSystemFontOfSize(30.0)
+        currentScoreLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
+        currentScoreLabel.textAlignment = .Center
+        addSubview(currentScoreLabel)
+        
+        titleLabel = UILabel(frame: CGRect(x: 25.0, y: currentScoreLabel.frame.origin.y + currentScoreLabel.frame.size.height, width: frame.size.width - 50.0, height: 110.0))
         titleLabel.textColor = UIColor.lightGrayColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
@@ -61,7 +78,7 @@ class ThreeButtonsAlert: UIView {
         firstButton = UIButton(frame: CGRect(x: 30.0, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 10.0, width: frame.size.width - 60.0, height: 40.0))
         firstButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         firstButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
-        firstButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        firstButton.titleLabel?.font = UIFont.boldSystemFontOfSize(13.0)
         firstButton.addTarget(self, action: "firstButtonPressed", forControlEvents: .TouchUpInside)
         addSubview(firstButton)
         
@@ -78,6 +95,14 @@ class ThreeButtonsAlert: UIView {
         thirdButton.addTarget(self, action: "thirdButtonPressed", forControlEvents: .TouchUpInside)
         thirdButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
         addSubview(thirdButton)
+        
+        let fourthButton = UIButton(frame: CGRectOffset(thirdButton.frame, 0.0, thirdButton.frame.size.height + 10.0))
+        fourthButton.setTitle("Exit Game", forState: .Normal)
+        fourthButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        fourthButton.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
+        fourthButton.addTarget(self, action: "fourthButtonPressed", forControlEvents: .TouchUpInside)
+        fourthButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        addSubview(fourthButton)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -154,6 +179,12 @@ class ThreeButtonsAlert: UIView {
     func thirdButtonPressed() {
         if let theDelegate = delegate {
             theDelegate.thirdButtonPressedInAlert(self)
+        }
+    }
+    
+    func fourthButtonPressed() {
+        if let theDelegate = delegate {
+            theDelegate.fourthButtonPressedInAlert(self)
         }
     }
 }

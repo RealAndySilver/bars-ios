@@ -8,13 +8,15 @@
 
 import UIKit
 
-class MainMenuViewController: UIViewController {
+class MainMenuViewController: UIViewController, GKGameCenterControllerDelegate {
 
+    @IBOutlet weak var shopButton: UIButton!
+    @IBOutlet weak var rankingsButton: UIButton!
     @IBOutlet weak var barsTitleLabel: UILabel!
     @IBOutlet weak var trainingButton: UIButton!
     @IBOutlet weak var arcadeButton: UIButton!
     @IBOutlet weak var expertButton: UIButton!
-    @IBOutlet weak var rankingsButton: UIButton!
+    @IBOutlet weak var statisticsButton: UIButton!
     @IBOutlet weak var leftBarView: UIView!
     @IBOutlet weak var centerBarView: UIView!
     @IBOutlet weak var rightBarView: UIView!
@@ -54,12 +56,24 @@ class MainMenuViewController: UIViewController {
         expertButton.layer.borderWidth = 1.0
         expertButton.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
         
+        statisticsButton.layer.borderWidth = 1.0
+        statisticsButton.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
+        
         rankingsButton.layer.borderWidth = 1.0
-        rankingsButton.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
+        rankingsButton.layer.borderColor = AppColors.sharedInstance().getObjBarColors().first?.CGColor
+        
+        shopButton.layer.borderWidth = 1.0
+        shopButton.layer.borderColor = AppColors.sharedInstance().getObjBarColors().first?.CGColor
     }
     
     //MARK: Actions 
     
+    @IBAction func rankingsButtonPressed(sender: AnyObject) {
+        let gameCenterVC = GKGameCenterViewController()
+        gameCenterVC.viewState = GKGameCenterViewControllerState.Leaderboards
+        gameCenterVC.gameCenterDelegate = self
+        presentViewController(gameCenterVC, animated: true, completion: nil)
+    }
     
     @IBAction func trainingButtonPressed(sender: AnyObject) {
         goToArcadeGames = false
@@ -162,5 +176,11 @@ class MainMenuViewController: UIViewController {
         }) { (sucess) -> Void in
             
         }
+    }
+    
+    //MARK: GameCenterDelegate
+    
+    func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController!) {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }

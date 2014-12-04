@@ -11,6 +11,7 @@ import UIKit
 protocol GameOverAlertDelegate {
     func restartButtonPressedInGameOverAlert()
     func exitButtonPressedInAlert()
+    func rankingsButtonPressedInAlert()
     func gameOverAlertDidDisappearFromResetting()
 }
 
@@ -20,6 +21,12 @@ class GameOverAlert: UIView {
     var opacityView: UIView!
     var barsLabel: UILabel!
     var titleLabel: UILabel!
+    var highScoreLabel: UILabel!
+    var bestScore: String = "" {
+        didSet {
+            highScoreLabel.text = bestScore
+        }
+    }
     var userDidHighScore: Bool = false
     var titleText: String = ""  {
         didSet {
@@ -40,22 +47,38 @@ class GameOverAlert: UIView {
         //alpha = 1.0
         //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
-        titleLabel = UILabel(frame: CGRect(x: 20.0, y: 20.0, width: frame.size.width - 40.0, height: 30.0))
+        titleLabel = UILabel(frame: CGRect(x: 20.0, y: 30.0, width: frame.size.width/2.0 - 20.0, height: 30.0))
         titleLabel.textColor = UIColor.lightGrayColor()
         //titleLabel.backgroundColor = UIColor.cyanColor()
-        titleLabel.font = UIFont.boldSystemFontOfSize(20.0)
+        titleLabel.font = UIFont.boldSystemFontOfSize(17.0)
         titleLabel.textAlignment = .Center
         addSubview(titleLabel)
         
-        barsLabel = UILabel(frame: CGRect(x: 10.0, y: frame.size.height/2.0 - 42.0, width: frame.size.width - 20.0, height: 70.0))
+        barsLabel = UILabel(frame: CGRectOffset(titleLabel.frame, titleLabel.frame.size.width, 0.0))
         barsLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
-        barsLabel.font = UIFont.boldSystemFontOfSize(60.0)
+        barsLabel.font = UIFont.boldSystemFontOfSize(25.0)
         barsLabel.adjustsFontSizeToFitWidth = true
         //barsLabel.backgroundColor = UIColor.redColor()
         barsLabel.textAlignment = .Center
         addSubview(barsLabel)
         
-        let restartButton = UIButton(frame: CGRect(x: 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
+        let bestLabel = UILabel(frame: CGRectOffset(titleLabel.frame, 0.0, titleLabel.frame.size.height + 10.0))
+        bestLabel.text = "Best"
+        bestLabel.textColor = UIColor.lightGrayColor()
+        //bestLabel.backgroundColor = UIColor.orangeColor()
+        bestLabel.font = UIFont.boldSystemFontOfSize(17.0)
+        bestLabel.textAlignment = .Center
+        addSubview(bestLabel)
+        
+        highScoreLabel = UILabel(frame: CGRectOffset(bestLabel.frame, bestLabel.frame.size.width, 0.0))
+        highScoreLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
+        highScoreLabel.font = UIFont.boldSystemFontOfSize(25.0)
+        highScoreLabel.adjustsFontSizeToFitWidth = true
+        highScoreLabel.textAlignment = .Center
+        //highScoreLabel.backgroundColor = UIColor.purpleColor()
+        addSubview(highScoreLabel)
+        
+        let restartButton = UIButton(frame: CGRect(x: 20.0, y: bestLabel.frame.origin.y + bestLabel.frame.size.height + 20.0, width: frame.size.width/2.0 - 25.0, height: 40.0))
         restartButton.setTitle("Restart", forState: .Normal)
         restartButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         restartButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
@@ -63,10 +86,19 @@ class GameOverAlert: UIView {
         restartButton.addTarget(self, action: "restartButtonPressed", forControlEvents: .TouchUpInside)
         addSubview(restartButton)
         
-        let exitButton = UIButton(frame: CGRect(x: frame.size.width/2.0 + 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
+        let rankingsButton = UIButton(frame: CGRectOffset(restartButton.frame, restartButton.frame.size.width + 10.0, 0.0))
+        rankingsButton.setTitle("Rankings", forState: .Normal)
+        rankingsButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        rankingsButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
+        rankingsButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        rankingsButton.addTarget(self, action: "rankingsButtonPressed", forControlEvents: .TouchUpInside)
+        addSubview(rankingsButton)
+        
+        let exitButton = UIButton(frame: CGRectOffset(restartButton.frame, 0.0, restartButton.frame.size.height + 10.0))
+        exitButton.center = CGPoint(x: frame.size.width/2.0, y: exitButton.center.y)
         exitButton.setTitle("Exit", forState: .Normal)
         exitButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        exitButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
+        exitButton.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
         exitButton.addTarget(self, action: "exitButtonPressed", forControlEvents: .TouchUpInside)
         exitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
         addSubview(exitButton)
@@ -93,6 +125,12 @@ class GameOverAlert: UIView {
         if let theDelegate = delegate {
             theDelegate.restartButtonPressedInGameOverAlert()
             closeAlert()
+        }
+    }
+    
+    func rankingsButtonPressed() {
+        if let theDelegate = delegate {
+            theDelegate.rankingsButtonPressedInAlert()
         }
     }
     
