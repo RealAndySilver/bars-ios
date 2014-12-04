@@ -10,6 +10,8 @@ import UIKit
 
 class UserData: NSObject {
     
+    let kInitialCoins = 50
+    
     class func sharedInstance() -> UserData {
         struct Static {
             static var onceToken: dispatch_once_t = 0
@@ -62,9 +64,9 @@ class UserData: NSObject {
             
         } else {
             //No se habían guardado las monedas, guardémolas 
-            NSUserDefaults.standardUserDefaults().setObject(5, forKey: "coins")
+            NSUserDefaults.standardUserDefaults().setObject(kInitialCoins, forKey: "coins")
             NSUserDefaults.standardUserDefaults().synchronize()
-            return 5
+            return kInitialCoins
         }
     }
     

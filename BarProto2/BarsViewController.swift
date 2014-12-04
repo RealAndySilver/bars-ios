@@ -47,6 +47,9 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var gamesLost = UserData.sharedInstance().getGamesLost()
     var expertModeActivated: Bool!
     var trainingModeActivated: Bool!
+    var gamesLostInCurrentGame = 0
+    var kCoinsNeededMultiplier = 2
+    var coinsNeededToContinue = 2
    
     var videoAlert: ThreeButtonsAlert!
     
@@ -535,8 +538,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func userLost() {
-        println("ACTIVE BAR INDEX CUANDO PERDIÓ EL USUARIO: \(activeBarIndex)")
-        
+        gamesLostInCurrentGame++
         saveTotalTouches()
         saveBarsCompleted()
         gamesLost++
@@ -559,13 +561,16 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             println("No alcanzé por \(pixelDifference) pixeles")
         }
         
-        if pixelDifference > 6 || trainingModeActivated == true || userViewedVideoOrUsedCoin {
+        if pixelDifference > 8 || trainingModeActivated == true {
             //Dont zoom because the difference was too high or we are in training mode or we already watched a video
             showLostAlert()
             saveUserScore()
             checkAchievements()
             return;
         }
+        
+        //Calculate the required coins to continue the current game 
+        coinsNeededToContinue = Int(pow(Double(kCoinsNeededMultiplier), Double(gamesLostInCurrentGame - 1)))
         
         //If the user lost by few pixels, zoom in the bars and show the options
         zoomInBars()
@@ -686,6 +691,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func resetGame() {
+        gamesLostInCurrentGame = 0
         userDidResetGame = true
         gameActivated = true
         userViewedVideoOrUsedCoin = false
@@ -887,14 +893,19 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func showViewVideoAlert() {
         gameActivated = false
-    
+        
         videoAlert = ThreeButtonsAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 210.0, width: 250.0, height: 420.0))
         videoAlert.firstButtonTitle = "Watch Video (Gift: 5 Coins)"
-        videoAlert.secondButtonTitle = "Use Coins (5 Required)"
+        videoAlert.secondButtonTitle = "Use Coins (\(coinsNeededToContinue) Required)"
         videoAlert.thirdButtonTitle = "Restart Game"
         videoAlert.message = "You missed by just a few pixels! you can watch a video or use a coin to continue the current game!"
         videoAlert.delegate = self
         videoAlert.currentScoreLabel.text = "\(score)"
+        
+        if gamesLostInCurrentGame >= 2 {
+            videoAlert.firstButton.hidden = true
+        }
+        
         videoAlert.showInView(view)
     }
     
@@ -983,12 +994,12 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     func secondButtonPressedInAlert(alert: ThreeButtonsAlert) {
         //Use Coins
         let coins = UserData.sharedInstance().getCoins()
-        if coins > 0 {
+        if coins >= coinsNeededToContinue {
             userViewedVideoOrUsedCoin = true
             alert.closeAlert()
             zoomOutBars()
-            UserData.sharedInstance().setCoins(coins - 1)
-            updateCoins(coins - 1)
+            UserData.sharedInstance().setCoins(coins - coinsNeededToContinue)
+            updateCoins(coins - coinsNeededToContinue)
             
         } else {
             //UIAlertView(title: "Oops!", message: "You don't have coins available.", delegate: self, cancelButtonTitle: "OK").show()
@@ -999,11 +1010,6 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
                 if success {
                     let productsArray = products as Array<IAPProduct>
                     self.showBuyAlertWithProducts(productsArray)
-                    /*for index in 0...productsArray.count - 1 {
-                        let product = productsArray[index] as IAPProduct
-                        println("Nombre del producto: \(product.skProduct.localizedTitle)")
-                        println("Precio del producto: \(product.skProduct.priceAsString(product.skProduct.price))")
-                    }*/
                 }
             })
         }
