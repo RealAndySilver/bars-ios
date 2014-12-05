@@ -25,6 +25,11 @@ class UserData: NSObject {
     
     //Setters
     
+    func setNumberOfBars(numberOfBars: Int) {
+        NSUserDefaults.standardUserDefaults().setObject(numberOfBars, forKey: "bars")
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
     func setCoins(coins: Int) {
         NSUserDefaults.standardUserDefaults().setObject(coins, forKey: "coins")
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -56,6 +61,17 @@ class UserData: NSObject {
     }
     
     //Getters 
+    
+    func getNumberOfBars() -> Int {
+        let numberOfBars = NSUserDefaults.standardUserDefaults().objectForKey("bars") as Int?
+        if let theBars = numberOfBars {
+            return theBars
+        } else {
+            NSUserDefaults.standardUserDefaults().setObject(5, forKey: "bars")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            return 5
+        }
+    }
     
     func getCoins() -> Int {
         let coins = NSUserDefaults.standardUserDefaults().objectForKey("coins") as Int?

@@ -18,7 +18,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     @IBOutlet weak var highScoreLabel: UILabel!
     var tapLabel: UILabel!
     
-    let kNumberOfBarsInScreen = 5
+    let kNumberOfBarsInScreen = UserData.sharedInstance().getNumberOfBars()
     let kScoreIncreaseFactor = 1000;
     var countingLabel: UICountingLabel!
     var score: Int = 0
@@ -32,7 +32,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     var activeBar: UIView!
     var activeObjectiveRect: UIView!
     var correctBars = 0
-    var speedsArray: Array<Int> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    var speedsArray: Array<Int> = []
     var viewIsZoomed = false
     var gameActivated = false
     var gameWillBegin = false
@@ -101,7 +101,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func setupSpeeds() {
         //Go through all the speeds in our array (There are 10 speed values because there are 10 bars)
-        for index in 0...9 {
+        for index in 0...(kNumberOfBarsInScreen * 2 - 1) {
+            speedsArray.append(0)
             if expertModeActivated == true {
                 //If we are in expert mode, all the speed are going to have the max value
                 speedsArray[index] = 7
@@ -191,14 +192,14 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         } else {
             //We are configuring the second container (The container that is displayed when we complete the first
             //five bars. The index of the bars in this container will go from 5 to 9)
-            initialIndex = 5
+            initialIndex = kNumberOfBarsInScreen
         }
         
         //The bars width will be the screen width divided by five
-        let barWidth: CGFloat = (view.bounds.size.width - 12.0)/5.0
+        let barWidth: CGFloat = (view.bounds.size.width - (2 * CGFloat(kNumberOfBarsInScreen) + 1))/CGFloat(kNumberOfBarsInScreen)
         
         //Iterate to create the five bars and the five small rects in the container
-        for index in 0...4 {
+        for index in 0...(kNumberOfBarsInScreen - 1) {
             //Create the bar
             let barView = UIView(frame: CGRect(x:2*CGFloat(index + 1) + CGFloat(index) * barWidth, y: view.bounds.size.height - 180.0, width: barWidth, height: view.bounds.size.height + 10.0))
             barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index + initialIndex] - 3]
@@ -264,14 +265,14 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func setupNewBarsColors() {
         //Setup colors of the bars inside the first container
-        for index in 1...5 {
+        for index in 1...kNumberOfBarsInScreen {
             if let barView = barsContainer1.viewWithTag(index) {
                 barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3]
             }
         }
         
         //Setup the colors of the bars inside the second container
-        for index in 6...10 {
+        for index in kNumberOfBarsInScreen+1...kNumberOfBarsInScreen*2 {
             if let barView = barsContainer2.viewWithTag(index) {
                 barView.backgroundColor = palettesArray[selectedPalette][speedsArray[index - 1] - 3]
             }
@@ -391,7 +392,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
                     //Set the bars of the container 1 to the origin position
                     self.setContainer1BarsToOrigin()
                     
-                    self.activeBarIndex = 6
+                    self.activeBarIndex = self.kNumberOfBarsInScreen + 1
                     
                 } else {
                     var newContainer2Frame = self.barsContainer2.frame
@@ -419,7 +420,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func createWinLabelWithText(text: String, inBarsContainer: UIView) {
         //Create a label above the objective rect
-        let winLabel = UILabel(frame: CGRect(x: activeObjectiveRect.frame.origin.x, y: activeObjectiveRect.frame.origin.y - 22.0, width: activeObjectiveRect.frame.size.width, height: 20.0))
+        let winLabel = UILabel(frame: CGRect(x: 0.0, y: activeObjectiveRect.frame.origin.y - 22.0, width: 80.0, height: 20.0))
+        winLabel.center = CGPointMake(activeObjectiveRect.center.x, winLabel.center.y)
         winLabel.text = text
         winLabel.textColor = palettesArray.first?.last
         winLabel.font = UIFont.boldSystemFontOfSize(13.0)
@@ -458,7 +460,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             hiddeTapLabel()
             gameActivated = true
             
-            if (activeBarIndex == 6 || activeBarIndex == 11) && !userDidResetGame {
+            if (activeBarIndex == kNumberOfBarsInScreen + 1 || activeBarIndex == kNumberOfBarsInScreen * 2 + 1) && !userDidResetGame {
                 println("ENTRE ACAAAAAAA A ANIMAR")
                 animateContainerHorizontally()
                 //userDidResetGame = true
@@ -565,7 +567,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             println("No alcanzé por \(pixelDifference) pixeles")
         }
         
-        if pixelDifference > 8 || trainingModeActivated == true {
+        if pixelDifference > 6 || trainingModeActivated == true {
             //Dont zoom because the difference was too high or we are in training mode or we already watched a video
             showLostAlert()
             saveUserScore()
@@ -636,16 +638,16 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func setContainer1BarsToOrigin() {
         if expertModeActivated == false && trainingModeActivated == false {
-            randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
+            randomizeSpeedsBetweenLowIndex(0, maxIndex: kNumberOfBarsInScreen - 1)
         }
-        setBarsToOriginInContainer(barsContainer1, initialIndex: 1, finalIndex: 5)
+        setBarsToOriginInContainer(barsContainer1, initialIndex: 1, finalIndex: kNumberOfBarsInScreen)
     }
     
     func setContainer2BarsToOrigin() {
         if expertModeActivated == false && trainingModeActivated == false {
-            randomizeSpeedsBetweenLowIndex(5, maxIndex: 9)
+            randomizeSpeedsBetweenLowIndex(kNumberOfBarsInScreen, maxIndex: kNumberOfBarsInScreen*2 - 1)
         }
-        setBarsToOriginInContainer(barsContainer2, initialIndex: 6, finalIndex: 10)
+        setBarsToOriginInContainer(barsContainer2, initialIndex: kNumberOfBarsInScreen + 1, finalIndex: kNumberOfBarsInScreen * 2)
     }
     
     //MARK: Custom Methods
@@ -661,7 +663,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         activeBarIndex++;
         
         //If the user ended moving a set of 5 bars, animate and show the new bars
-        if (activeBarIndex == 6 || activeBarIndex == 11) {
+        if (activeBarIndex == kNumberOfBarsInScreen + 1 || activeBarIndex == kNumberOfBarsInScreen * 2 + 1) {
             stopTimer()
             animateContainerHorizontally()
             
@@ -707,17 +709,17 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             //Perdiste estando en el container 1
             activeBarIndex = 1
             if expertModeActivated == false  && trainingModeActivated == false {
-                randomizeSpeedsBetweenLowIndex(0, maxIndex: 4)
+                randomizeSpeedsBetweenLowIndex(0, maxIndex: kNumberOfBarsInScreen - 1)
             }
-            resetBarsContainer(barsContainer1, initIndex: 1, finalIndex: 5)
+            resetBarsContainer(barsContainer1, initIndex: 1, finalIndex: kNumberOfBarsInScreen)
             
         } else {
             //Perdiste estando en el container 2
-            activeBarIndex = 6
+            activeBarIndex = kNumberOfBarsInScreen + 1
             if expertModeActivated == false && trainingModeActivated == false {
-                randomizeSpeedsBetweenLowIndex(5, maxIndex: 9)
+                randomizeSpeedsBetweenLowIndex(kNumberOfBarsInScreen, maxIndex: kNumberOfBarsInScreen * 2 - 1)
             }
-            resetBarsContainer(barsContainer2, initIndex: 6, finalIndex: 10)
+            resetBarsContainer(barsContainer2, initIndex: kNumberOfBarsInScreen + 1, finalIndex: kNumberOfBarsInScreen * 2)
         }
     }
     

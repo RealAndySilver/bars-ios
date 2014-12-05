@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="e9Q-uv-IfD">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
@@ -417,9 +418,29 @@
                                 <color key="textColor" red="0.21960784489999999" green="0.92156863209999995" blue="0.91372549530000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="5" maxValue="50" translatesAutoresizingMaskIntoConstraints="NO" id="9js-di-qAJ">
+                                <rect key="frame" x="29" y="409" width="542" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Or1-zX-g5y"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="sliderChanged:" destination="92m-KG-Oe8" eventType="valueChanged" id="9VU-oQ-4Zj"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of bars: 5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kzx-Zk-iIJ">
+                                <rect key="frame" x="210" y="470" width="180" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="Pzh-IU-HJw"/>
+                                    <constraint firstAttribute="height" constant="21" id="tJ9-Mv-Z1h"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="9js-di-qAJ" firstAttribute="leading" secondItem="lo4-It-t8D" secondAttribute="leadingMargin" constant="15" id="0Pr-YA-RX2"/>
                             <constraint firstItem="ofw-lq-0vS" firstAttribute="width" secondItem="lo4-It-t8D" secondAttribute="width" multiplier="0.86" id="3FK-h3-02Y"/>
                             <constraint firstItem="ofw-lq-0vS" firstAttribute="top" secondItem="9uD-g8-EOe" secondAttribute="bottom" constant="8" id="4SJ-H9-2pu"/>
                             <constraint firstItem="9uD-g8-EOe" firstAttribute="height" secondItem="lo4-It-t8D" secondAttribute="height" multiplier="0.1" id="5TS-sR-iaA"/>
@@ -427,13 +448,18 @@
                             <constraint firstItem="TJm-Eg-lad" firstAttribute="top" secondItem="4tw-FC-arG" secondAttribute="bottom" constant="8" id="AF2-rg-coJ"/>
                             <constraint firstItem="pnn-oT-p4H" firstAttribute="top" secondItem="ExX-ey-V2f" secondAttribute="bottom" constant="8" id="BTv-K0-pu7"/>
                             <constraint firstItem="pnn-oT-p4H" firstAttribute="height" secondItem="lo4-It-t8D" secondAttribute="height" multiplier="0.1" id="Erw-KH-sIb"/>
+                            <constraint firstAttribute="centerX" secondItem="9js-di-qAJ" secondAttribute="centerX" id="FOZ-1X-ST4"/>
                             <constraint firstItem="ExX-ey-V2f" firstAttribute="top" secondItem="auQ-br-TOe" secondAttribute="bottom" constant="8" id="FS3-jl-Ahi"/>
                             <constraint firstItem="ExX-ey-V2f" firstAttribute="height" secondItem="lo4-It-t8D" secondAttribute="height" multiplier="0.1" id="Nc9-to-hBA"/>
                             <constraint firstItem="pnn-oT-p4H" firstAttribute="width" secondItem="lo4-It-t8D" secondAttribute="width" multiplier="0.86" id="OKo-k2-fOh"/>
                             <constraint firstItem="auQ-br-TOe" firstAttribute="top" secondItem="ofw-lq-0vS" secondAttribute="bottom" constant="8" id="QrP-pZ-pLQ"/>
                             <constraint firstItem="4tw-FC-arG" firstAttribute="leading" secondItem="lo4-It-t8D" secondAttribute="leading" constant="16" id="U1t-db-K1i"/>
+                            <constraint firstAttribute="centerX" secondItem="Kzx-Zk-iIJ" secondAttribute="centerX" id="WX6-Uf-une"/>
+                            <constraint firstItem="Kzx-Zk-iIJ" firstAttribute="top" secondItem="9js-di-qAJ" secondAttribute="bottom" constant="31" id="coV-E7-67L"/>
                             <constraint firstAttribute="centerX" secondItem="9uD-g8-EOe" secondAttribute="centerX" id="gEo-HL-B45"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9js-di-qAJ" secondAttribute="trailing" constant="15" id="iJ9-9y-9jg"/>
                             <constraint firstItem="ofw-lq-0vS" firstAttribute="height" secondItem="lo4-It-t8D" secondAttribute="height" multiplier="0.1" id="kCx-pI-pmu"/>
+                            <constraint firstItem="9js-di-qAJ" firstAttribute="top" secondItem="pnn-oT-p4H" secondAttribute="bottom" constant="8" id="ldx-Ty-nKT"/>
                             <constraint firstItem="auQ-br-TOe" firstAttribute="width" secondItem="lo4-It-t8D" secondAttribute="width" multiplier="0.86" id="mKR-QU-AoP"/>
                             <constraint firstItem="9uD-g8-EOe" firstAttribute="width" secondItem="lo4-It-t8D" secondAttribute="width" multiplier="0.86" id="opx-Ov-DrF"/>
                             <constraint firstItem="ExX-ey-V2f" firstAttribute="width" secondItem="lo4-It-t8D" secondAttribute="width" multiplier="0.86" id="rqa-uy-03V"/>
@@ -448,6 +474,8 @@
                         <outlet property="arcadeScoreLabel" destination="9uD-g8-EOe" id="NiZ-LS-7Zw"/>
                         <outlet property="backButton" destination="4tw-FC-arG" id="eeg-Qn-3b7"/>
                         <outlet property="barsCompletedLabel" destination="ExX-ey-V2f" id="Yle-vD-0bP"/>
+                        <outlet property="barsLabel" destination="Kzx-Zk-iIJ" id="Z6K-46-kps"/>
+                        <outlet property="barsSlider" destination="9js-di-qAJ" id="jj2-T1-Rea"/>
                         <outlet property="expertScoreLabel" destination="ofw-lq-0vS" id="eOv-K2-N52"/>
                         <outlet property="gamesLostLabel" destination="pnn-oT-p4H" id="N7b-pk-xGd"/>
                         <outlet property="totalTouchesLabel" destination="auQ-br-TOe" id="crA-LL-A8o"/>

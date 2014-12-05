@@ -10,6 +10,8 @@ import UIKit
 
 class StatisticsViewController: UIViewController, GKGameCenterControllerDelegate {
 
+    @IBOutlet weak var barsLabel: UILabel!
+    @IBOutlet weak var barsSlider: UISlider!
     @IBOutlet weak var arcadeScoreLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var expertScoreLabel: UILabel!
@@ -23,7 +25,15 @@ class StatisticsViewController: UIViewController, GKGameCenterControllerDelegate
         setupUI()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        UserData.sharedInstance().setNumberOfBars(Int(barsSlider.value))
+    }
+    
     func setupUI() {
+        barsSlider.value = Float(UserData.sharedInstance().getNumberOfBars())
+        barsLabel.text = "Number of bars: \(Int(barsSlider.value))"
+        
         //backButton.layer.borderWidth = 1.0
         //backButton.layer.borderColor = AppColors.sharedInstance().getObjBarColors().first?.CGColor
         
@@ -57,6 +67,12 @@ class StatisticsViewController: UIViewController, GKGameCenterControllerDelegate
         gameCenterVC.viewState = GKGameCenterViewControllerState.Leaderboards
         gameCenterVC.gameCenterDelegate = self
         presentViewController(gameCenterVC, animated: true, completion: nil)
+    }
+    
+    @IBAction func sliderChanged(sender: UISlider) {
+        let roundedValue = Int(round(sender.value))
+        barsLabel.text = "Number of bars: \(roundedValue)"
+        sender.value = Float(roundedValue)
     }
     
     //MARK: GameCenterDelegate
