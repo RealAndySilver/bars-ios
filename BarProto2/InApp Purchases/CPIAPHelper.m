@@ -16,10 +16,16 @@
 @implementation CPIAPHelper
 
 -(instancetype)init {
-    IAPProduct *fiveCoinsProduct = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.bars.fivecoins"];
+    IAPProduct *hundredCoinsProduct = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.bars.coins100"];
+    IAPProduct *twoHundredCoinsProduct = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.bars.coins250"];
+    IAPProduct *sixHundredCoinsProduct = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.bars.coins600"];
+    IAPProduct *thousanCoinsProduct = [[IAPProduct alloc] initWithProductIdentifier:@"com.iamstudio.bars.coins1200"];
     
-    NSMutableDictionary *products = [@{fiveCoinsProduct.productIdentifier : fiveCoinsProduct,
-                                       } mutableCopy];
+    NSMutableDictionary *products = [@{hundredCoinsProduct.productIdentifier : hundredCoinsProduct,
+                                       twoHundredCoinsProduct.productIdentifier : twoHundredCoinsProduct,
+                                       sixHundredCoinsProduct.productIdentifier : sixHundredCoinsProduct,
+                                       thousanCoinsProduct.productIdentifier : thousanCoinsProduct}
+                                     mutableCopy];
     if (self = [super initWithProducts:products]) {
         
     }

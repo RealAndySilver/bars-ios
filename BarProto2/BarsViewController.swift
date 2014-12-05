@@ -18,6 +18,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     @IBOutlet weak var highScoreLabel: UILabel!
     var tapLabel: UILabel!
     
+    let kNumberOfBarsInScreen = 5
     let kScoreIncreaseFactor = 1000;
     var countingLabel: UICountingLabel!
     var score: Int = 0
@@ -78,6 +79,11 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         setupUI()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        highScoreLabel.text = "\(UserData.sharedInstance().getCoins())"
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if firstTimeViewAppears {
@@ -113,8 +119,6 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func setupUI() {
-        //Coins label
-        highScoreLabel.text = "\(UserData.sharedInstance().getCoins())"
         timeLabel.text = "0"
         
         //Setup the two containers of our bars. Each container will have 5 bars inside
@@ -1002,16 +1006,21 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             updateCoins(coins - coinsNeededToContinue)
             
         } else {
+            if let shopVC = storyboard?.instantiateViewControllerWithIdentifier("Shop") as? ShopViewController {
+                shopVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                presentViewController(shopVC, animated: true, completion: nil)
+            }
+
             //UIAlertView(title: "Oops!", message: "You don't have coins available.", delegate: self, cancelButtonTitle: "OK").show()
             //The user doesn't have coins available. Get the In-App Purchases and show the buy alert 
-            MBProgressHUD.showHUDAddedTo(view, animated: true)
+            /*MBProgressHUD.showHUDAddedTo(view, animated: true)
             CPIAPHelper.sharedInstance().requestProductsWithCompletionHandler({ (success, products) -> Void in
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 if success {
                     let productsArray = products as Array<IAPProduct>
                     self.showBuyAlertWithProducts(productsArray)
                 }
-            })
+            })*/
         }
     }
     

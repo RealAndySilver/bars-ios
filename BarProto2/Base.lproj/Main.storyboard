@@ -187,6 +187,9 @@
                                     <color key="titleColor" red="1" green="0.80000000000000004" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="vO3-Sm-l85" kind="presentation" modalTransitionStyle="crossDissolve" id="h7m-AH-aGv"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="deviceRGB"/>
@@ -355,7 +358,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1IC-Gp-8Bp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1320" y="-183"/>
+            <point key="canvasLocation" x="1316" y="-773"/>
         </scene>
         <!--Statistics View Controller-->
         <scene sceneID="Upj-g1-nuI">
@@ -452,7 +455,73 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pnx-aC-M99" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1320" y="475"/>
+            <point key="canvasLocation" x="1316" y="-115"/>
+        </scene>
+        <!--Shop View Controller-->
+        <scene sceneID="NUT-08-TwO">
+            <objects>
+                <viewController storyboardIdentifier="Shop" id="vO3-Sm-l85" customClass="ShopViewController" customModule="BarProto2" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="z3f-kO-gkD"/>
+                        <viewControllerLayoutGuide type="bottom" id="Aci-dJ-is8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="v7G-Ja-cdj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8nq-3z-eIU">
+                                <rect key="frame" x="16" y="552" width="80" height="40"/>
+                                <color key="backgroundColor" red="0.21960784489999999" green="0.92156863209999995" blue="0.91372549530000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="0Fw-Hl-Fj1"/>
+                                    <constraint firstAttribute="width" constant="80" id="xN7-HT-gQn"/>
+                                </constraints>
+                                <state key="normal" title="Back">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButtonPressed:" destination="vO3-Sm-l85" eventType="touchUpInside" id="tVM-87-wj3"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HJq-j4-y7x">
+                                <rect key="frame" x="16" y="0.0" width="568" height="64"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shop" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tfv-3X-bJt">
+                                        <rect key="frame" x="235" y="14" width="98" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="ejG-X3-vLh"/>
+                                            <constraint firstAttribute="width" constant="98" id="yRi-R9-tsQ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.18668950388358119" green="0.93034518494897955" blue="0.8628078600694209" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="tfv-3X-bJt" secondAttribute="centerY" id="Cz0-wH-8pi"/>
+                                    <constraint firstAttribute="centerX" secondItem="tfv-3X-bJt" secondAttribute="centerX" id="Edd-b7-TOo"/>
+                                    <constraint firstAttribute="height" constant="64" id="RGN-eW-fby"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="HJq-j4-y7x" firstAttribute="top" secondItem="v7G-Ja-cdj" secondAttribute="top" id="C5g-jN-LYR"/>
+                            <constraint firstItem="8nq-3z-eIU" firstAttribute="leading" secondItem="v7G-Ja-cdj" secondAttribute="leading" constant="16" id="V0I-Ju-FB0"/>
+                            <constraint firstAttribute="trailing" secondItem="HJq-j4-y7x" secondAttribute="trailing" constant="16" id="fjo-LF-CZ7"/>
+                            <constraint firstItem="HJq-j4-y7x" firstAttribute="leading" secondItem="v7G-Ja-cdj" secondAttribute="leading" constant="16" id="jYG-83-8YG"/>
+                            <constraint firstItem="Aci-dJ-is8" firstAttribute="top" secondItem="8nq-3z-eIU" secondAttribute="bottom" constant="8" id="yQk-0l-LKR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="8nq-3z-eIU" id="UeM-hc-Phg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ibv-TZ-5CP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1394" y="573"/>
         </scene>
     </scenes>
 </document>

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8B4D33DC1A1FA9B0002924E4 /* fire.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B4D33DB1A1FA9B0002924E4 /* fire.png */; };
 		8B4D33E21A1FADAD002924E4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4D33E11A1FADAD002924E4 /* QuartzCore.framework */; };
+		8B90FB991A31E9C90029BD7C /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B90FB981A31E9C90029BD7C /* ShopViewController.swift */; };
+		8B90FB9C1A3203CA0029BD7C /* ShopItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B90FB9B1A3203CA0029BD7C /* ShopItemCell.swift */; };
 		8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9189E11A1CDB78003173C9 /* BarsViewController.swift */; };
 		8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB19671A1B87AE00138C2F /* AppDelegate.swift */; };
 		8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAB19691A1B87AE00138C2F /* ViewController.swift */; };
@@ -71,6 +73,8 @@
 		8B4D33DB1A1FA9B0002924E4 /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
 		8B4D33DD1A1FAD13002924E4 /* BarProto2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BarProto2-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B4D33E11A1FADAD002924E4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8B90FB981A31E9C90029BD7C /* ShopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
+		8B90FB9B1A3203CA0029BD7C /* ShopItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShopItemCell.swift; path = "Custom Cells/ShopItemCell.swift"; sourceTree = "<group>"; };
 		8B9189E11A1CDB78003173C9 /* BarsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarsViewController.swift; sourceTree = "<group>"; };
 		8BAB19621A1B87AE00138C2F /* BarProto2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarProto2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BAB19661A1B87AE00138C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -177,6 +181,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		8B90FB9A1A32039F0029BD7C /* Custom Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8B90FB9B1A3203CA0029BD7C /* ShopItemCell.swift */,
+			);
+			name = "Custom Cells";
+			sourceTree = "<group>";
+		};
 		8BAB19591A1B87AE00138C2F = {
 			isa = PBXGroup;
 			children = (
@@ -206,11 +218,13 @@
 				A05128D41A23824200892993 /* Libraries */,
 				A05128E81A23B12800892993 /* ObjC Classes */,
 				A0063C961A24E188002B73F0 /* Custom Views */,
+				8B90FB9A1A32039F0029BD7C /* Custom Cells */,
 				8BAB19671A1B87AE00138C2F /* AppDelegate.swift */,
 				8BAB19691A1B87AE00138C2F /* ViewController.swift */,
 				8B9189E11A1CDB78003173C9 /* BarsViewController.swift */,
 				A08FAEE91A24CCB20085603F /* MainMenuViewController.swift */,
 				A0063C9B1A2513D7002B73F0 /* StatisticsViewController.swift */,
+				8B90FB981A31E9C90029BD7C /* ShopViewController.swift */,
 				A05128E91A23B16200892993 /* AppColors.swift */,
 				A0063C991A24EFEE002B73F0 /* UserData.swift */,
 				8BAB196B1A1B87AE00138C2F /* Main.storyboard */,
@@ -499,6 +513,7 @@
 				A05128EC1A23DC9B00892993 /* GameOverAlert.swift in Sources */,
 				A082AE531A2E0A0900F0B1F9 /* CPIAPHelper.m in Sources */,
 				8BAB196A1A1B87AE00138C2F /* ViewController.swift in Sources */,
+				8B90FB991A31E9C90029BD7C /* ShopViewController.swift in Sources */,
 				A0EB23EF1A28FB9F0077665D /* GameKitHelper.m in Sources */,
 				A05128DF1A2390A500892993 /* DWFParticleView.m in Sources */,
 				A05128D81A23824F00892993 /* UICountingLabel.m in Sources */,
@@ -511,6 +526,7 @@
 				A082AE591A2E0DF500F0B1F9 /* MBProgressHUD.m in Sources */,
 				A05128EA1A23B16200892993 /* AppColors.swift in Sources */,
 				8BAB19681A1B87AE00138C2F /* AppDelegate.swift in Sources */,
+				8B90FB9C1A3203CA0029BD7C /* ShopItemCell.swift in Sources */,
 				A0063C9A1A24EFEE002B73F0 /* UserData.swift in Sources */,
 				8B9189E21A1CDB78003173C9 /* BarsViewController.swift in Sources */,
 				A082AE5C1A2E12BD00F0B1F9 /* SKProduct+PriceAsString.m in Sources */,
