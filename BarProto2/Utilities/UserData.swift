@@ -67,9 +67,9 @@ class UserData: NSObject {
         if let theBars = numberOfBars {
             return theBars
         } else {
-            NSUserDefaults.standardUserDefaults().setObject(5, forKey: "bars")
+            NSUserDefaults.standardUserDefaults().setObject(10, forKey: "bars")
             NSUserDefaults.standardUserDefaults().synchronize()
-            return 5
+            return 10
         }
     }
     

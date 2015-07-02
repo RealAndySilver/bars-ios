@@ -40,12 +40,12 @@ class TwoButtonsAlert: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
         //alpha = 0.0
         //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         titleLabel = UILabel(frame: CGRect(x: 20.0, y: 16.0, width: frame.size.width - 40.0, height: 140.0))
-        titleLabel.textColor = UIColor.lightGrayColor()
+        titleLabel.textColor = UIColor.whiteColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .Justified
@@ -60,7 +60,7 @@ class TwoButtonsAlert: UIView {
         
         rightButton = UIButton(frame: CGRect(x: frame.size.width/2.0 + 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
         rightButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        rightButton.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
+        rightButton.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
         rightButton.addTarget(self, action: "rightButtonPressed", forControlEvents: .TouchUpInside)
         rightButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
         addSubview(rightButton)

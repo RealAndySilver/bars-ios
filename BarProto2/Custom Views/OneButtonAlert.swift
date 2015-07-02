@@ -33,12 +33,12 @@ class OneButtonAlert: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
         alpha = 0.0
         transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         titleLabel = UILabel(frame: CGRect(x: 10.0, y: 20.0, width: frame.size.width - 20.0, height: 60.0))
-        titleLabel.textColor = UIColor.lightGrayColor()
+        titleLabel.textColor = UIColor.whiteColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .Center
@@ -56,7 +56,7 @@ class OneButtonAlert: UIView {
         super.init(coder: aDecoder)
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
     }
     

@@ -76,7 +76,7 @@ class ViewController: UIViewController {
         }
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /*activeBarIndex++;
         
         if (touches.count == 1) {
@@ -92,7 +92,7 @@ class ViewController: UIViewController {
         }
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         //stopTimer()
         //checkIfUserWon()
     }

@@ -43,12 +43,12 @@ class GameOverAlert: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
         //alpha = 1.0
         //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         titleLabel = UILabel(frame: CGRect(x: 20.0, y: 30.0, width: frame.size.width/2.0 - 20.0, height: 30.0))
-        titleLabel.textColor = UIColor.lightGrayColor()
+        titleLabel.textColor = UIColor.whiteColor()
         //titleLabel.backgroundColor = UIColor.cyanColor()
         titleLabel.font = UIFont.boldSystemFontOfSize(17.0)
         titleLabel.textAlignment = .Center
@@ -64,7 +64,7 @@ class GameOverAlert: UIView {
         
         let bestLabel = UILabel(frame: CGRectOffset(titleLabel.frame, 0.0, titleLabel.frame.size.height + 10.0))
         bestLabel.text = "Best"
-        bestLabel.textColor = UIColor.lightGrayColor()
+        bestLabel.textColor = UIColor.whiteColor()
         //bestLabel.backgroundColor = UIColor.orangeColor()
         bestLabel.font = UIFont.boldSystemFontOfSize(17.0)
         bestLabel.textAlignment = .Center
@@ -98,7 +98,7 @@ class GameOverAlert: UIView {
         exitButton.center = CGPoint(x: frame.size.width/2.0, y: exitButton.center.y)
         exitButton.setTitle("Exit", forState: .Normal)
         exitButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        exitButton.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
+        exitButton.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
         exitButton.addTarget(self, action: "exitButtonPressed", forControlEvents: .TouchUpInside)
         exitButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
         addSubview(exitButton)
@@ -109,8 +109,8 @@ class GameOverAlert: UIView {
     }
     
     //MARK: Touches
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+  
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         println("me tocaron")
     }
     

@@ -30,32 +30,40 @@ class StatisticsViewController: UIViewController, GKGameCenterControllerDelegate
         UserData.sharedInstance().setNumberOfBars(Int(barsSlider.value))
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        UIView.animateWithDuration(0.5,
+            delay: 0.0,
+            options: .CurveEaseOut,
+            animations: { () -> Void in
+                self.arcadeScoreLabel.transform = CGAffineTransformIdentity
+                self.expertScoreLabel.transform = CGAffineTransformIdentity
+                self.totalTouchesLabel.transform = CGAffineTransformIdentity
+                self.barsCompletedLabel.transform = CGAffineTransformIdentity
+                self.gamesLostLabel.transform = CGAffineTransformIdentity
+        }) { (success) -> Void in
+            
+        }
+    }
+    
     func setupUI() {
         barsSlider.value = Float(UserData.sharedInstance().getNumberOfBars())
         barsLabel.text = "Number of bars: \(Int(barsSlider.value))"
-        
-        //backButton.layer.borderWidth = 1.0
-        //backButton.layer.borderColor = AppColors.sharedInstance().getObjBarColors().first?.CGColor
-        
-        arcadeScoreLabel.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
-        arcadeScoreLabel.layer.borderWidth = 1.0
+        //barsSlider.hidden = true
+        //barsLabel.hidden = true
+   
         arcadeScoreLabel.text = "Arcade High Score: \(UserData.sharedInstance().getScore())"
-        
-        expertScoreLabel.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
-        expertScoreLabel.layer.borderWidth = 1.0
         expertScoreLabel.text = "Expert High Score: \(UserData.sharedInstance().getExpertScore())"
-        
-        totalTouchesLabel.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
-        totalTouchesLabel.layer.borderWidth = 1.0
         totalTouchesLabel.text = "Total Touches: \(UserData.sharedInstance().getTotalTouches())"
-        
-        barsCompletedLabel.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
-        barsCompletedLabel.layer.borderWidth = 1.0
         barsCompletedLabel.text = "Bars Completed: \(UserData.sharedInstance().getBarsCompleted())"
-        
-        gamesLostLabel.layer.borderColor = AppColors.sharedInstance().getPatternColors().first?.last?.CGColor
-        gamesLostLabel.layer.borderWidth = 1.0
         gamesLostLabel.text = "Games Lost: \(UserData.sharedInstance().getGamesLost())"
+        
+        //Set the initial position of the bars
+        arcadeScoreLabel.transform = CGAffineTransformMakeTranslation(-arcadeScoreLabel.frame.size.width, 0.0)
+        expertScoreLabel.transform = CGAffineTransformMakeTranslation(-expertScoreLabel.frame.size.width, 0.0)
+        totalTouchesLabel.transform = CGAffineTransformMakeTranslation(-totalTouchesLabel.frame.size.width, 0.0)
+        barsCompletedLabel.transform = CGAffineTransformMakeTranslation(-barsCompletedLabel.frame.size.width, 0.0)
+        gamesLostLabel.transform = CGAffineTransformMakeTranslation(-gamesLostLabel.frame.size.width, 0.0)
     }
     
     @IBAction func backButtonPressed(sender: AnyObject) {

@@ -69,7 +69,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     override func viewDidLoad() {
         super.viewDidLoad()
         VungleSDK.sharedSDK().delegate = self
-        view.backgroundColor = UIColor.whiteColor()
+        //view.backgroundColor = UIColor(white: 0.20 , alpha: 1.0)
+        //containerUI.backgroundColor = view.backgroundColor
         
         //Choose a random color pallete for the initial bars
         selectedPalette = Int(arc4random()%UInt32(palettesArray.count))
@@ -142,12 +143,12 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         tapLabel = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 100.0, y: view.frame.size.height/2.0 - 70.0, width: 200.0, height: 200.0))
         tapLabel.text = "Get Ready!\nTap to begin!"
         tapLabel.numberOfLines = 0
-        tapLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
+        tapLabel.textColor = UIColor(white: 0.4, alpha: 1.0)
         tapLabel.font = UIFont.boldSystemFontOfSize(25.0)
         tapLabel.textAlignment = .Center
         tapLabel.alpha = 0.0
-        tapLabel.shadowColor = UIColor.whiteColor()
-        tapLabel.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        //tapLabel.shadowColor = UIColor.whiteColor()
+        //tapLabel.shadowOffset = CGSize(width: 1.0, height: 1.0)
         view.addSubview(tapLabel)
         
         //If we are in the training mode, hidde all the unnecessary UI
@@ -450,8 +451,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     //MARK: Touches Handling
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        let touch = touches.anyObject() as UITouch
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch = touches.first! as! UITouch
         
         //println("ACTIVE BAR INDEX: \(activeBarIndex)")
         
@@ -859,13 +860,13 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func showTapLabel() {
+        self.readyToBeginGame = true
         UIView.animateWithDuration(0.3,
             delay: 0.0,
             options: .CurveLinear,
             animations: { () -> Void in
                 self.tapLabel.alpha = 1.0
         }) { (success) -> Void in
-            self.readyToBeginGame = true
         }
     }
     
@@ -907,9 +908,13 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         videoAlert.message = "You missed by just a few pixels! you can watch a video or use a coin to continue the current game!"
         videoAlert.delegate = self
         videoAlert.currentScoreLabel.text = "\(score)"
+        if userBeatHighScore() && trainingModeActivated == false {
+            videoAlert.userDidHighScore = true
+        }
         
         if gamesLostInCurrentGame >= 2 {
             videoAlert.firstButton.hidden = true
+            videoAlert.message = "You missed by just a few pixels! you can use a coin to continue the current game!"
         }
         
         videoAlert.showInView(view)
@@ -934,7 +939,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         /*if FlurryAds.adReadyForSpace("TopBanner") {
             FlurryAds.displayAdForSpace("TopBanner", onView: view, viewControllerForPresentation: self)
         }*/
-        FlurryAds.fetchAndDisplayAdForSpace("TopBanner", view: view, viewController: self, size: BANNER_TOP)
+        FlurryAds.fetchAndDisplayAdForSpace("TopBanner", view: view, viewController: self, size: BANNER_BOTTOM)
     }
     
     func hiddeAd() {
@@ -942,8 +947,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     }
     
     func showLostAlert() {
-        showAd()
         gameActivated = false
+        showAd()
         
         let gameOverAlert = GameOverAlert(frame: CGRect(x: view.bounds.size.width/2.0 - 125.0, y: view.bounds.size.height/2.0 - 110.0, width: 250.0, height: 220.0))
         gameOverAlert.score = score
@@ -977,8 +982,13 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
     
     func restartButtonPressedInGameOverAlert() {
         hiddeAd()
-        resetGame()
         showTapLabel()
+        resetGame()
+        
+        //If the user close the alert too fast, the alert might not have enough time to 
+        //display so it would be displayed when the user is playing. In this case we have to
+        //remove the alert because it interfers with the UI when the user is playing
+        //NSTimer.scheduledTimerWithTimeInterval(2.0, target: self, selector: "hiddeAd", userInfo: nil, repeats: false)
     }
     
     func gameOverAlertDidDisappearFromResetting() {
@@ -1008,7 +1018,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
             updateCoins(coins - coinsNeededToContinue)
             
         } else {
-            if let shopVC = storyboard?.instantiateViewControllerWithIdentifier("Shop") as? ShopViewController {
+            if let shopVC = storyboard?.instantiateViewControllerWithIdentifier("NewShop") as? NewShopViewController {
                 shopVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
                 presentViewController(shopVC, animated: true, completion: nil)
             }
