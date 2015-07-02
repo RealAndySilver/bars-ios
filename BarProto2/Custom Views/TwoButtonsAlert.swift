@@ -39,38 +39,38 @@ class TwoButtonsAlert: UIView {
     }
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
-        //alpha = 0.0
-        //transform = CGAffineTransformMakeScale(0.5, 0.5)
-        
         titleLabel = UILabel(frame: CGRect(x: 20.0, y: 16.0, width: frame.size.width - 40.0, height: 140.0))
         titleLabel.textColor = UIColor.whiteColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .Justified
-        addSubview(titleLabel)
         
         leftButton = UIButton(frame: CGRect(x: 20.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
         leftButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         leftButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
         leftButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
-        leftButton.addTarget(self, action: "leftButtonPressed", forControlEvents: .TouchUpInside)
-        addSubview(leftButton)
         
         rightButton = UIButton(frame: CGRect(x: frame.size.width/2.0 + 10.0, y: frame.size.height - 50.0, width: frame.size.width/2.0 - 20.0, height: 40.0))
         rightButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         rightButton.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
-        rightButton.addTarget(self, action: "rightButtonPressed", forControlEvents: .TouchUpInside)
         rightButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        
+        super.init(frame: frame)
+        addSubview(titleLabel)
+        addSubview(leftButton)
         addSubview(rightButton)
+        leftButton.addTarget(self, action: "leftButtonPressed", forControlEvents: .TouchUpInside)
+        rightButton.addTarget(self, action: "rightButtonPressed", forControlEvents: .TouchUpInside)
+        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
+        //alpha = 0.0
+        //transform = CGAffineTransformMakeScale(0.5, 0.5)*/
     }
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("This class doesn't support NSCoding.")
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
     }
     

@@ -143,7 +143,7 @@ class NewShopViewController: UIViewController {
         CPIAPHelper.sharedInstance().requestProductsWithCompletionHandler { (success, products) -> Void in
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             if success {
-                self.productsArray = products as Array<IAPProduct>
+                self.productsArray = products as! Array<IAPProduct>
                 self.sortProducts()
                 self.showBars()
                 self.animateCoins()

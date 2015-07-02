@@ -252,7 +252,8 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         } else {
             //Activate the game
             playButton.setTitle("Pause", forState: .Normal)
-            startTimer()
+            readyToBeginGame = true
+            //startTimer()
         }
     }
     
@@ -456,7 +457,7 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         
         //println("ACTIVE BAR INDEX: \(activeBarIndex)")
         
-        if touches.count == 1 && readyToBeginGame && touch.locationInView(view).y > 68.0 {
+        if touches.count == 1 && readyToBeginGame && touch.locationInView(view).y > 68.0 && !gamePaused {
             readyToBeginGame = false
             hiddeTapLabel()
             gameActivated = true
@@ -473,7 +474,11 @@ class BarsViewController: UIViewController, GameOverAlertDelegate, TwoButtonsAle
         }
         
         else if touches.count == 1 && gameActivated && touch.locationInView(view).y > 68.0 && !gamePaused {
+            println("Entre a checkear si ganoooooooo ***************************************************************")
+            println("El game activated está en: \(gameActivated) y el gamePausedEstá en: \(gamePaused)")
             checkIfUserWon()
+        } else {
+            println("no estoy haciendo ni shit")
         }
     }
 

@@ -32,28 +32,29 @@ class OneButtonAlert: UIView {
     }
     
     override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
-        alpha = 0.0
-        transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         titleLabel = UILabel(frame: CGRect(x: 10.0, y: 20.0, width: frame.size.width - 20.0, height: 60.0))
         titleLabel.textColor = UIColor.whiteColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .Center
-        addSubview(titleLabel)
         
         acceptButton = UIButton(frame: CGRect(x: frame.size.width/2.0 - 45.0, y: frame.size.height - 50.0, width: 90.0, height: 40.0))
         acceptButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         acceptButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
-        acceptButton.addTarget(self, action: "acceptButtonPressed", forControlEvents: .TouchUpInside)
         acceptButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        
+        super.init(frame: frame)
+        acceptButton.addTarget(self, action: "acceptButtonPressed", forControlEvents: .TouchUpInside)
         addSubview(acceptButton)
+        addSubview(titleLabel)
+        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
+        alpha = 0.0
+        transform = CGAffineTransformMakeScale(0.5, 0.5)
     }
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("Esta clase no soporta NSCoding")
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {

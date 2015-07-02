@@ -49,17 +49,14 @@ class ThreeButtonsAlert: UIView {
     }
 
     override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
         //alpha = 0.0
         //transform = CGAffineTransformMakeScale(0.5, 0.5)
         
         let scoreLabel = UILabel(frame: CGRect(x: 25.0, y: 20.0, width: frame.size.width - 50.0, height: 30.0))
         scoreLabel.text = "Score"
-        scoreLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last?
+        scoreLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
         scoreLabel.textAlignment = .Center
         scoreLabel.font = UIFont.systemFontOfSize(17.0)
-        addSubview(scoreLabel)
         
         currentScoreLabel = UILabel(frame: CGRect(x: 25.0, y: scoreLabel.frame.origin.y + scoreLabel.frame.size.height, width: frame.size.width - 50.0, height: 35.0))
         //currentScoreLabel.text = "120.000"
@@ -67,50 +64,55 @@ class ThreeButtonsAlert: UIView {
         currentScoreLabel.font = UIFont.boldSystemFontOfSize(30.0)
         currentScoreLabel.textColor = AppColors.sharedInstance().getPatternColors().first?.last
         currentScoreLabel.textAlignment = .Center
-        addSubview(currentScoreLabel)
         
         titleLabel = UILabel(frame: CGRect(x: 25.0, y: currentScoreLabel.frame.origin.y + currentScoreLabel.frame.size.height, width: frame.size.width - 50.0, height: 110.0))
         titleLabel.textColor = UIColor.whiteColor()
         titleLabel.font = UIFont.systemFontOfSize(16.0)
         titleLabel.numberOfLines = 0
         titleLabel.textAlignment = .Center
-        addSubview(titleLabel)
         
         firstButton = UIButton(frame: CGRect(x: 30.0, y: titleLabel.frame.origin.y + titleLabel.frame.size.height + 10.0, width: frame.size.width - 60.0, height: 40.0))
         firstButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         firstButton.backgroundColor = AppColors.sharedInstance().getPatternColors().first?.last
         firstButton.titleLabel?.font = UIFont.boldSystemFontOfSize(13.0)
-        firstButton.addTarget(self, action: "firstButtonPressed", forControlEvents: .TouchUpInside)
-        addSubview(firstButton)
         
         secondButton = UIButton(frame: CGRectOffset(firstButton.frame, 0.0, firstButton.frame.size.height + 10.0))
         secondButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         secondButton.backgroundColor = UIColor(red: 1.0, green: 123.0/255.0, blue: 111.0/255.0, alpha: 1.0)
-        secondButton.addTarget(self, action: "secondButtonPressed", forControlEvents: .TouchUpInside)
         secondButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
-        addSubview(secondButton)
         
         thirdButton = UIButton(frame: CGRectOffset(secondButton.frame, 0.0, secondButton.frame.size.height + 10.0))
         thirdButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         thirdButton.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
-        thirdButton.addTarget(self, action: "thirdButtonPressed", forControlEvents: .TouchUpInside)
         thirdButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
-        addSubview(thirdButton)
         
         let fourthButton = UIButton(frame: CGRectOffset(thirdButton.frame, 0.0, thirdButton.frame.size.height + 10.0))
         fourthButton.setTitle("Exit Game", forState: .Normal)
         fourthButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         fourthButton.backgroundColor = UIColor(white: 0.3, alpha: 1.0)
-        fourthButton.addTarget(self, action: "fourthButtonPressed", forControlEvents: .TouchUpInside)
         fourthButton.titleLabel?.font = UIFont.boldSystemFontOfSize(15.0)
+        
+        super.init(frame: frame)
+        backgroundColor = UIColor(white: 0.2, alpha: 1.0)
+        addSubview(titleLabel)
+        addSubview(firstButton)
+        addSubview(secondButton)
+        addSubview(thirdButton)
         addSubview(fourthButton)
+        addSubview(scoreLabel)
+        addSubview(currentScoreLabel)
+
+        fourthButton.addTarget(self, action: "fourthButtonPressed", forControlEvents: .TouchUpInside)
+        thirdButton.addTarget(self, action: "thirdButtonPressed", forControlEvents: .TouchUpInside)
+        secondButton.addTarget(self, action: "secondButtonPressed", forControlEvents: .TouchUpInside)
+        firstButton.addTarget(self, action: "firstButtonPressed", forControlEvents: .TouchUpInside)
     }
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("This class doesnt support NSCoding")
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
     }
     

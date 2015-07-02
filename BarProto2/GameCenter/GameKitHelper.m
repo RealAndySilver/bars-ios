@@ -210,7 +210,7 @@
                  [NSMutableArray array];
                  
                  for (GKScore *score in scores) {
-                     if (![score.playerID
+                     if (![score.player.playerID
                            isEqualToString:
                            [GKLocalPlayer localPlayer]
                            .playerID]) {

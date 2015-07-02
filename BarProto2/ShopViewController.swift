@@ -58,7 +58,7 @@ class ShopViewController: UIViewController, UICollectionViewDelegate, UICollecti
         CPIAPHelper.sharedInstance().requestProductsWithCompletionHandler { (success, products) -> Void in
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             if success {
-                self.productsArray = products as Array<IAPProduct>
+                self.productsArray = products as! Array<IAPProduct>
                 self.sortProducts()
             }
         }
@@ -94,7 +94,7 @@ class ShopViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID", forIndexPath: indexPath) as ShopItemCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellID", forIndexPath: indexPath) as! ShopItemCell
         
         let product = orderedProductsArray[indexPath.item]
         cell.delegate = self

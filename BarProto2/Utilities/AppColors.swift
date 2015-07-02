@@ -27,8 +27,8 @@ class AppColors: NSObject {
         let plistFilePath = NSBundle.mainBundle().pathForResource("Colors", ofType: "plist")
         if let colorsInfoArray = NSArray(contentsOfFile: plistFilePath!) {
             for index in 0...colorsInfoArray.count - 1 {
-                let colorDic = colorsInfoArray[index] as Dictionary<String, AnyObject>
-                let objColorDic = colorDic["objBarColor"] as Dictionary<String, Int>
+                let colorDic = colorsInfoArray[index] as! Dictionary<String, AnyObject>
+                let objColorDic = colorDic["objBarColor"] as! Dictionary<String, Int>
                 let red = objColorDic["r"]
                 let green = objColorDic["g"]
                 let blue = objColorDic["b"]
@@ -46,8 +46,8 @@ class AppColors: NSObject {
         if let plistFilePath = NSBundle.mainBundle().pathForResource("Colors", ofType: "plist") {
             if let colorsInfoArray = NSArray(contentsOfFile: plistFilePath) {
                 for index in 0...colorsInfoArray.count - 1 {
-                    let colorDic = colorsInfoArray[index] as Dictionary<String, AnyObject>
-                    let patternArray = colorDic["patternColors"] as Array<Dictionary<String, Int>>
+                    let colorDic = colorsInfoArray[index] as! Dictionary<String, AnyObject>
+                    let patternArray = colorDic["patternColors"] as! Array<Dictionary<String, Int>>
                     
                     var colorsInPatternArray: Array<UIColor> = []
                     

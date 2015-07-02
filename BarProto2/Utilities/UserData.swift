@@ -63,7 +63,7 @@ class UserData: NSObject {
     //Getters 
     
     func getNumberOfBars() -> Int {
-        let numberOfBars = NSUserDefaults.standardUserDefaults().objectForKey("bars") as Int?
+        let numberOfBars = NSUserDefaults.standardUserDefaults().objectForKey("bars") as? Int
         if let theBars = numberOfBars {
             return theBars
         } else {
@@ -74,7 +74,7 @@ class UserData: NSObject {
     }
     
     func getCoins() -> Int {
-        let coins = NSUserDefaults.standardUserDefaults().objectForKey("coins") as Int?
+        let coins = NSUserDefaults.standardUserDefaults().objectForKey("coins") as? Int
         if let theCoins = coins {
             return theCoins
             
@@ -87,7 +87,7 @@ class UserData: NSObject {
     }
     
     func getScore() -> Int {
-        let score = NSUserDefaults.standardUserDefaults().objectForKey("score") as Int?
+        let score = NSUserDefaults.standardUserDefaults().objectForKey("score") as? Int
         if let theScore = score {
             //The score int exists
             return theScore
@@ -97,7 +97,7 @@ class UserData: NSObject {
     }
     
     func getExpertScore() -> Int {
-        let score = NSUserDefaults.standardUserDefaults().objectForKey("expertScore") as Int?
+        let score = NSUserDefaults.standardUserDefaults().objectForKey("expertScore") as? Int
         if let theScore = score {
             //The expert score int exist
             return theScore
@@ -107,7 +107,7 @@ class UserData: NSObject {
     }
     
     func getTotalTouches() -> Int {
-        let totalTouches = NSUserDefaults.standardUserDefaults().objectForKey("totalTouches") as Int?
+        let totalTouches = NSUserDefaults.standardUserDefaults().objectForKey("totalTouches") as? Int
         if let theTouches = totalTouches {
             //The touches int exists
             return theTouches
@@ -117,7 +117,7 @@ class UserData: NSObject {
     }
     
     func getBarsCompleted() -> Int {
-        let barsCompleted = NSUserDefaults.standardUserDefaults().objectForKey("barsCompleted") as Int?
+        let barsCompleted = NSUserDefaults.standardUserDefaults().objectForKey("barsCompleted") as? Int
         if let theBarsCompleted = barsCompleted {
             //The bars completed int exist
             return theBarsCompleted
@@ -127,7 +127,7 @@ class UserData: NSObject {
     }
     
     func getGamesLost() -> Int {
-        let gamesLost = NSUserDefaults.standardUserDefaults().objectForKey("gamesLost") as Int?
+        let gamesLost = NSUserDefaults.standardUserDefaults().objectForKey("gamesLost") as? Int
         if let theGamesLost = gamesLost {
             //The games lost int exist 
             return theGamesLost
